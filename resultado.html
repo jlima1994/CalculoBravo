@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultado</title>
+
+<style>
+body { font-family: Arial; background:#f2f2f2; padding:10px; }
+.container { max-width:500px; margin:auto; background:#fff; padding:15px; border-radius:10px; }
+.result { font-family: monospace; white-space: pre; }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>RESULTADO FINAL</h2>
+
+<div class="result" id="res"></div>
+
+</div>
+
+<script>
+const r = JSON.parse(localStorage.getItem("resultado"));
+
+function f(v){ return v.toFixed(2).padStart(10); }
+
+const totalFinal = r.totalDiarias + r.totalAluguel + r.totalDeslocamento + r.totalPed;
+
+const texto =
+`R$ ${f(r.totalDiarias)}  TOTAL DIÁRIAS
+R$ ${f(r.totalAluguel)}  TOTAL ALUGUEL
+R$ ${f(r.totalDeslocamento)}  TOTAL DESLOCAMENTO (KM)
+R$ ${f(r.totalPed)}  TOTAL PEDÁGIOS
+
+R$ ${f(totalFinal)}  VALOR A RECEBER DIA ${r.dia}`;
+
+document.getElementById("res").innerText = texto;
+</script>
+
+</body>
+</html>
