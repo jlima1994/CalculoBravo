@@ -1,75 +1,99 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resultado</title>
 
 <style>
-body { font-family: Arial; background:#f2f2f2; padding:10px; }
-.container { max-width:500px; margin:auto; background:#fff; padding:15px; border-radius:10px; }
-
-.topo { margin-bottom:10px; font-size:14px; }
-
-.result {
-    font-family: monospace;
-    white-space: pre;
+body{
+font-family: monospace;
+background:#000;
+color:#0f0;
+padding:20px;
+white-space:pre;
+}
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+font-size:18px;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<h2>RESULTADO FINAL</h2>
+<div id="topo"></div>
 
-<div class="topo" id="topo"></div>
-<div class="result" id="res"></div>
+<br>
 
-</div>
+<div id="res"></div>
+
+<button onclick="copiar()">COPIAR RESENHA</button>
 
 <script>
-const r = JSON.parse(localStorage.getItem("resultado"));
+const r = JSON.parse(localStorage.getItem("resultado") || localStorage.getItem("dados"));
 
-function f(v){ return v.toFixed(2).padStart(10); }
+function f(v){ return (v||0).toFixed(2).padStart(10); }
 
 const meses = [
 "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
 "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
 ];
 
-let proxMes = meses[(meses.indexOf(r.mes) + 1) % 12];
+let idx = meses.indexOf(r.mes);
+let proxMes = meses[(idx + 1) % 12];
 
-let topo = (r.dia == "10")
-? `Pagamento a ser realizado dia 10 de ${proxMes}`
-: `Pagamento a ser realizado dia 25 de ${proxMes}`;
+// 🔥 PAGAMENTO (SUBSTITUI RESULTADO FINAL)
+let textoTopo = (r.dia == "10")
+? `PAGAMENTO A SER REALIZADO DIA 10 DE ${proxMes.toUpperCase()}`
+: `PAGAMENTO A SER REALIZADO DIA 25 DE ${proxMes.toUpperCase()}`;
 
-document.getElementById("topo").innerText = topo;
+document.getElementById("topo").innerText = textoTopo;
 
-const totalFinal = r.totalDiarias + r.totalAluguel + r.totalDeslocamento + r.totalPed;
+// valores padrão (caso segurança)
+let totalDiarias = r.totalDiarias || 0;
+let totalAluguel = r.totalAluguel || 0;
+let totalDeslocamento = r.totalDeslocamento || 0;
+let totalPed = r.totalPed || 0;
+let qtd = r.qtd || 0;
+let km = r.totalKm || 0;
+
+let totalFinal = totalDiarias + totalAluguel + totalDeslocamento + totalPed;
 
 let linhas = [];
 
-if(r.totalDiarias > 0){
-    linhas.push(`R$ ${f(r.totalDiarias)}  TOTAL DIÁRIAS (${r.qtd})`);
+// 🔥 OCULTA ZERO
+if(totalDiarias > 0){
+linhas.push(`R$ ${f(totalDiarias)}  TOTAL DIÁRIAS (${qtd})`);
 }
 
-if(r.totalAluguel > 0){
-    linhas.push(`R$ ${f(r.totalAluguel)}  TOTAL ALUGUEL (${r.qtd})`);
+if(totalAluguel > 0){
+linhas.push(`R$ ${f(totalAluguel)}  TOTAL ALUGUEL (${qtd})`);
 }
 
-if(r.totalDeslocamento > 0){
-    linhas.push(`R$ ${f(r.totalDeslocamento)}  TOTAL DESLOCAMENTO (${r.totalKm} KM)`);
+if(totalDeslocamento > 0){
+linhas.push(`R$ ${f(totalDeslocamento)}  TOTAL DESLOCAMENTO (${km} KM)`);
 }
 
-if(r.totalPed > 0){
-    linhas.push(`R$ ${f(r.totalPed)}  TOTAL PEDÁGIOS`);
+if(totalPed > 0){
+linhas.push(`R$ ${f(totalPed)}  TOTAL PEDÁGIOS`);
 }
 
+// total
 linhas.push("");
-linhas.push(`R$ ${f(totalFinal)}  VALOR A RECEBER`);
+linhas.push(`R$ ${f(totalFinal)}  TOTAL GERAL`);
 
 document.getElementById("res").innerText = linhas.join("\n");
+
+// copiar
+function copiar(){
+navigator.clipboard.writeText(
+document.getElementById("topo").innerText + "\n\n" +
+document.getElementById("res").innerText
+);
+alert("COPIADO!");
+}
 </script>
 
 </body>
