@@ -84,17 +84,20 @@ button {
 .row {
     display: flex;
     gap: 5px;
+    margin-bottom: 8px;
 }
 
 .row input {
     flex: 1;
 }
 
-/* RESULTADO */
+/* RESULTADO ESTILO EXTRATO */
 .result {
     background: #fff;
     padding: 15px;
-    font-weight: bold;
+    font-family: monospace;
+    white-space: pre-line;
+    font-size: 15px;
 }
 
 /* MOBILE */
@@ -187,9 +190,6 @@ button {
 
 <script>
 function gerarLinhas() {
-    const page1 = document.getElementById("page1");
-    const page2 = document.getElementById("page2");
-
     const qtd = parseInt(document.getElementById("qtd").value);
 
     if (!qtd) {
@@ -208,14 +208,11 @@ function gerarLinhas() {
         </div>`;
     }
 
-    page1.classList.add("hidden");
-    page2.classList.remove("hidden");
+    document.getElementById("page1").classList.add("hidden");
+    document.getElementById("page2").classList.remove("hidden");
 }
 
 function calcular() {
-    const page2 = document.getElementById("page2");
-    const page3 = document.getElementById("page3");
-
     const pedagios = document.querySelectorAll(".pedagio");
     const kms = document.querySelectorAll(".km");
 
@@ -241,18 +238,18 @@ function calcular() {
 
     const dia = quinzena == "10" ? "DIA 10" : "DIA 25";
 
-    const texto = `
-R$ ${totalDiarias.toFixed(2)} = TOTAL DIÁRIAS<br>
-R$ ${totalAluguel.toFixed(2)} = TOTAL ALUGUEL<br>
-R$ ${totalDeslocamento.toFixed(2)} = TOTAL DESLOCAMENTO (KM)<br>
-R$ ${totalPedagio.toFixed(2)} = TOTAL PEDÁGIOS<br><br>
-R$ ${totalFinal.toFixed(2)} = VALOR A RECEBER ${dia}
-    `;
+    const texto =
+`R$ ${totalDiarias.toFixed(2).padStart(10)}  TOTAL DIÁRIAS
+R$ ${totalAluguel.toFixed(2).padStart(10)}  TOTAL ALUGUEL
+R$ ${totalDeslocamento.toFixed(2).padStart(10)}  TOTAL DESLOCAMENTO (KM)
+R$ ${totalPedagio.toFixed(2).padStart(10)}  TOTAL PEDÁGIOS
 
-    document.getElementById("resultado").innerHTML = texto.toUpperCase();
+R$ ${totalFinal.toFixed(2).padStart(10)}  VALOR A RECEBER ${dia}`;
 
-    page2.classList.add("hidden");
-    page3.classList.remove("hidden");
+    document.getElementById("resultado").innerText = texto.toUpperCase();
+
+    document.getElementById("page2").classList.add("hidden");
+    document.getElementById("page3").classList.remove("hidden");
 }
 
 function copiar() {
