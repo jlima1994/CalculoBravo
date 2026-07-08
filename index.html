@@ -1,64 +1,4 @@
-<!DOCTYPE html>
-
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valor a Receber</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f4f4f4;
-}
-.container {
-    padding: 15px;
-}
-h2 {
-    text-align: center;
-}
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px;
-    font-size: 16px;
-}
-button {
-    width: 100%;
-    padding: 12px;
-    background: #000;
-    color: #fff;
-    border: none;
-    font-size: 16px;
-}
-.hidden {
-    display: none;
-}
-.table {
-    width: 100%;
-}
-.row {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 10px;
-}
-.row input {
-    flex: 1;
-}
-.result {
-    background: #fff;
-    padding: 15px;
-    margin-top: 10px;
-    font-weight: bold;
-}
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
+SUBSTITUA A PARTE DA PÁGINA 1 POR ESTA:
 
 <!-- PAGINA 1 -->
 
@@ -75,110 +15,38 @@ button {
 <option>NOVEMBRO</option><option>DEZEMBRO</option>
 </select>
 
-<label>QUINZENA</label> <input type="radio" name="quinzena" value="10"> DIA 01 A 15<br> <input type="radio" name="quinzena" value="25"> DIA 16 A 31
+<label>QUINZENA</label>
 
-<label>FUNÇÃO</label> <input type="radio" name="funcao" value="motorista"> MOTORISTA<br> <input type="radio" name="funcao" value="seguranca"> SEGURANÇA
+<div class="grupo">
+<label><input type="radio" name="quinzena" value="10"> DIA 01 A 15</label>
+<label><input type="radio" name="quinzena" value="25"> DIA 16 A 31</label>
+</div>
 
-<label>QUANTIDADE DE SERVIÇOS</label> <select id="qtd"> </select>
+<label>FUNÇÃO</label>
+
+<div class="grupo">
+<label><input type="radio" name="funcao" value="motorista"> MOTORISTA</label>
+<label><input type="radio" name="funcao" value="seguranca"> SEGURANÇA</label>
+</div>
+
+<label>QUANTIDADE DE SERVIÇOS</label> <select id="qtd"></select>
 
 <button onclick="gerarLinhas()">PRÓXIMO</button>
 
 </div>
 
-<!-- PAGINA 2 -->
+E ADICIONE NO CSS:
 
-<div id="page2" class="hidden">
-<h2>PEDÁGIO E KM</h2>
-
-<div id="lista"></div>
-
-<button onclick="calcular()">MOSTRAR RESULTADOS</button>
-
-</div>
-
-<!-- PAGINA 3 -->
-
-<div id="page3" class="hidden">
-<h2>RESULTADO FINAL</h2>
-
-<div class="result" id="resultado"></div>
-
-<button onclick="copiar()">COPIAR RESULTADO</button>
-
-</div>
-
-</div>
-
-<script>
-// preencher select 1-30
-for(let i=1;i<=30;i++){
-    let opt=document.createElement("option");
-    opt.text=i;
-    opt.value=i;
-    document.getElementById("qtd").appendChild(opt);
+.grupo {
+display: flex;
+flex-direction: column;
+gap: 5px;
+margin-bottom: 15px;
 }
 
-function gerarLinhas(){
-    let qtd = document.getElementById("qtd").value;
-    let lista = document.getElementById("lista");
-    lista.innerHTML="";
-
-    for(let i=1;i<=qtd;i++){
-        lista.innerHTML += `
-        <div class="row">
-            <input type="number" placeholder="Pedágio R$" class="pedagio">
-            <input type="number" placeholder="KM" class="km">
-        </div>`;
-    }
-
-    page1.classList.add("hidden");
-    page2.classList.remove("hidden");
+.grupo label {
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 15px;
 }
-
-function calcular(){
-    let pedagios = document.querySelectorAll(".pedagio");
-    let kms = document.querySelectorAll(".km");
-
-    let totalPedagio = 0;
-    let totalKM = 0;
-
-    pedagios.forEach(p => totalPedagio += Number(p.value) || 0);
-    kms.forEach(k => totalKM += Number(k.value) || 0);
-
-    let qtd = Number(document.getElementById("qtd").value);
-    let funcao = document.querySelector('input[name="funcao"]:checked')?.value;
-    let quinzena = document.querySelector('input[name="quinzena"]:checked')?.value;
-
-    let totalDiarias = qtd * 190;
-    let totalAluguel = funcao === "motorista" ? qtd * 49.5 : 0;
-    let totalDeslocamento = totalKM * 0.68;
-
-    let totalFinal = totalDiarias + totalAluguel + totalDeslocamento + totalPedagio;
-
-    let dia = quinzena == "10" ? "DIA 10" : "DIA 25";
-
-SUBSTITUA APENAS ESTA PARTE NO SEU CÓDIGO (FUNÇÃO CALCULAR):
-
-let texto = `R$ ${totalDiarias.toFixed(2)} = TOTAL DIÁRIAS<br>
-R$ ${totalAluguel.toFixed(2)} = TOTAL ALUGUEL<br>
-R$ ${totalDeslocamento.toFixed(2)} = TOTAL DESLOCAMENTO (KM)<br>
-R$ ${totalPedagio.toFixed(2)} = TOTAL PEDÁGIOS<br><br>
-R$ ${totalFinal.toFixed(2)} = VALOR A RECEBER ${dia}`;
-
-    `;
-
-    document.getElementById("resultado").innerHTML = texto.toUpperCase();
-
-    page2.classList.add("hidden");
-    page3.classList.remove("hidden");
-}
-
-function copiar(){
-    let texto = document.getElementById("resultado").innerText;
-    navigator.clipboard.writeText(texto);
-    alert("COPIADO!");
-}
-</script>
-
-</body>
-</html>
