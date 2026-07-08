@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedágio e KM</title>
+
+<style>
+body { font-family: Arial; background:#f2f2f2; padding:10px; }
+.container { max-width:500px; margin:auto; background:#fff; padding:15px; border-radius:10px; }
+input, button { width:100%; padding:8px; margin-top:5px; }
+.linha { display:flex; gap:5px; }
+.linha input { width:50%; }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>PEDÁGIO E QUILOMETRAGEM</h2>
+
+<div id="linhas"></div>
+
+<button onclick="calcular()">Mostrar Resultados</button>
+
+</div>
+
+<script>
+const dados = JSON.parse(localStorage.getItem("dados"));
+const container = document.getElementById("linhas");
+
+for(let i=0;i<dados.qtd;i++){
+    container.innerHTML += `
+    <div class="linha">
+        <input type="number" placeholder="Pedágio" id="ped${i}">
+        <input type="number" placeholder="KM" id="km${i}">
+    </div>`;
+}
+
+function calcular(){
+    let totalPed = 0;
+    let totalKm = 0;
+
+    for(let i=0;i<dados.qtd;i++){
+        totalPed += Number(document.getElementById("ped"+i).value || 0);
+        totalKm += Number(document.getElementById("km"+i).value || 0);
+    }
+
+    const totalDiarias = dados.qtd * 190;
+    const totalAluguel = dados.funcao === "motorista" ? dados.qtd * 49.5 : 0;
+    const totalDeslocamento = totalKm * 0.68;
+
+    const resultado = {
+        totalDiarias,
+        totalAluguel,
+        totalDeslocamento,
+        totalPed,
+        dia: dados.quinzena
+    };
+
+    localStorage.setItem("resultado", JSON.stringify(resultado));
+    window.location.href = "resultado.html";
+}
+</script>
+
+</body>
+</html>
