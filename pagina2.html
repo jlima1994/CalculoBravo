@@ -1,74 +1,67 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pedágio e KM</title>
 
 <style>
-body { font-family: Arial; background:#f2f2f2; padding:10px; }
-.container { max-width:500px; margin:auto; background:#fff; padding:15px; border-radius:10px; }
-
-.linha { display:flex; gap:5px; margin-top:5px; }
-.linha input { width:50%; }
-
-button {
-    width:100%;
-    padding:10px;
-    margin-top:10px;
+body{
+font-family: monospace;
+background:#000;
+color:#0f0;
+padding:20px;
+}
+input, button{
+width:100%;
+padding:15px;
+margin-top:10px;
+font-size:18px;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<h2>PEDÁGIO E KM</h2>
+<h2>DIÁRIAS</h2>
+<input type="number" id="diarias">
 
-<div id="linhas"></div>
+<h2>ALUGUEL</h2>
+<input type="number" id="aluguel">
 
-<button onclick="calcular()">MOSTRAR RESULTADOS</button>
+<h2>KM TOTAL</h2>
+<input type="number" id="km">
 
-</div>
+<h2>PEDÁGIO</h2>
+<input type="number" id="ped">
+
+<button onclick="calc()">CALCULAR</button>
 
 <script>
-const dados = JSON.parse(localStorage.getItem("dados"));
-const container = document.getElementById("linhas");
+function calc(){
 
-for(let i=0;i<dados.qtd;i++){
-    container.innerHTML += `
-    <div class="linha">
-        <input type="number" placeholder="Pedágio" id="ped${i}">
-        <input type="number" placeholder="KM" id="km${i}">
-    </div>`;
-}
+let dados = JSON.parse(localStorage.getItem("dados"));
 
-function calcular(){
-    let totalPed = 0;
-    let totalKm = 0;
+let qtd = Number(diarias.value);
+let aluguel = Number(aluguel.value);
+let km = Number(km.value);
+let ped = Number(ped.value);
 
-    for(let i=0;i<dados.qtd;i++){
-        totalPed += Number(document.getElementById("ped"+i).value || 0);
-        totalKm += Number(document.getElementById("km"+i).value || 0);
-    }
+let totalDiarias = qtd * 180;
+let totalAluguel = aluguel * 100;
+let totalDeslocamento = km * 2;
+let totalPed = ped;
 
-    const totalDiarias = dados.qtd * 190;
-    const totalAluguel = dados.funcao === "motorista" ? dados.qtd * 49.5 : 0;
-    const totalDeslocamento = totalKm * 0.68;
+localStorage.setItem("resultado", JSON.stringify({
+...dados,
+qtd,
+totalKm: km,
+totalDiarias,
+totalAluguel,
+totalDeslocamento,
+totalPed
+}));
 
-    const resultado = {
-        totalDiarias,
-        totalAluguel,
-        totalDeslocamento,
-        totalPed,
-        totalKm,
-        dia: dados.quinzena,
-        qtd: dados.qtd,
-        mes: dados.mes
-    };
-
-    localStorage.setItem("resultado", JSON.stringify(resultado));
-    window.location.href = "resultado.html";
+window.location = "resultado.html";
 }
 </script>
 
