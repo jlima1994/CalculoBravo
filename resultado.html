@@ -13,7 +13,7 @@ body {
 
 .container {
     margin-top: 40px;
-    width: 300px;
+    width: 320px;
 }
 
 .linha {
@@ -22,13 +22,14 @@ body {
     margin: 6px 0;
 }
 
-.desc {
+.valor {
     text-align: left;
+    min-width: 120px;
 }
 
-.valor {
+.desc {
     text-align: right;
-    min-width: 120px;
+    flex: 1;
 }
 </style>
 
@@ -37,8 +38,16 @@ function formatar(v){
     return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 }
 
+function proximoMes(mes){
+    const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+                   "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+    let i = meses.indexOf(mes);
+    return meses[(i + 1) % 12];
+}
+
 function carregar(){
 
+    let mes = localStorage.getItem("mes");
     let q = localStorage.getItem("quinzena");
 
     let d = Number(localStorage.getItem("totalDiarias")) || 0;
@@ -49,22 +58,22 @@ function carregar(){
 
     let total = d + a + des + ped;
 
-    let pagamento = q === "PrimeiraQuinzena"
-        ? `Valor a Receber dia 10`
-        : `Valor a Receber dia 25`;
+    let dataPagamento = q === "PrimeiraQuinzena"
+        ? `Receber em: 10 de ${proximoMes(mes)}`
+        : `Receber em: 25 de ${proximoMes(mes)}`;
 
     let html = `<div class="container">`;
 
-    html += `<h3>${pagamento}</h3>`;
+    html += `<h3>${dataPagamento}</h3>`;
 
-    html += `<div class="linha"><div class="desc">Total Diárias</div><div class="valor">${formatar(d)}</div></div>`;
-    html += `<div class="linha"><div class="desc">Total Aluguel</div><div class="valor">${formatar(a)}</div></div>`;
-    html += `<div class="linha"><div class="desc">Total Deslocamento (${km} KM)</div><div class="valor">${formatar(des)}</div></div>`;
-    html += `<div class="linha"><div class="desc">Total Pedágios</div><div class="valor">${formatar(ped)}</div></div>`;
+    html += `<div class="linha"><div class="valor">${formatar(d)}</div><div class="desc">Total Diárias</div></div>`;
+    html += `<div class="linha"><div class="valor">${formatar(a)}</div><div class="desc">Total Aluguel</div></div>`;
+    html += `<div class="linha"><div class="valor">${formatar(des)}</div><div class="desc">Total Deslocamento (${km} KM)</div></div>`;
+    html += `<div class="linha"><div class="valor">${formatar(ped)}</div><div class="desc">Total Pedágios</div></div>`;
 
     html += `<hr>`;
 
-    html += `<div class="linha"><div class="desc"><strong>Total</strong></div><div class="valor"><strong>${formatar(total)}</strong></div></div>`;
+    html += `<div class="linha"><div class="valor"><strong>${formatar(total)}</strong></div><div class="desc"><strong>Total</strong></div></div>`;
 
     html += `</div>`;
 
