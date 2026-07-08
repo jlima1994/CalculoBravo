@@ -3,65 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-font-family: monospace;
-background:#000;
-color:#0f0;
-padding:20px;
-}
-input, button{
-width:100%;
-padding:15px;
-margin-top:10px;
-font-size:18px;
-}
-</style>
+<title>Dados Motorista</title>
 </head>
 
 <body>
 
-<h2>DIÁRIAS</h2>
+<h3>Quantidade de Diárias</h3>
 <input type="number" id="diarias">
 
-<h2>ALUGUEL</h2>
+<h3>Quantidade de Aluguel</h3>
 <input type="number" id="aluguel">
 
-<h2>KM TOTAL</h2>
+<h3>KM Rodado</h3>
 <input type="number" id="km">
 
-<h2>PEDÁGIO</h2>
+<h3>Pedágio (R$)</h3>
 <input type="number" id="ped">
 
-<button onclick="calc()">CALCULAR</button>
+<br><br>
+<button onclick="calcular()">Calcular</button>
 
 <script>
-function calc(){
+function calcular(){
 
-let dados = JSON.parse(localStorage.getItem("dados"));
+let base = JSON.parse(localStorage.getItem("dados"));
 
-let qtd = Number(diarias.value);
-let aluguel = Number(aluguel.value);
-let km = Number(km.value);
-let ped = Number(ped.value);
+let qtdDiarias = Number(document.getElementById("diarias").value || 0);
+let qtdAluguel = Number(document.getElementById("aluguel").value || 0);
+let km = Number(document.getElementById("km").value || 0);
+let pedagio = Number(document.getElementById("ped").value || 0);
 
-let totalDiarias = qtd * 180;
-let totalAluguel = aluguel * 100;
+// cálculos
+let totalDiarias = qtdDiarias * 180;
+let totalAluguel = qtdAluguel * 100;
 let totalDeslocamento = km * 2;
-let totalPed = ped;
+let totalPed = pedagio;
 
 localStorage.setItem("resultado", JSON.stringify({
-...dados,
-qtd,
-totalKm: km,
+...base,
+qtdDiarias,
+qtdAluguel,
+km,
 totalDiarias,
 totalAluguel,
 totalDeslocamento,
 totalPed
 }));
 
-window.location = "resultado.html";
+window.location.href = "resultado.html";
 }
 </script>
 
