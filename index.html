@@ -37,18 +37,22 @@ select, .box {
 let quinzena = "";
 let funcao = "";
 
-function selQuinzena(q){
-    quinzena = q;
+function selQuinzena(valor, elemento){
+    quinzena = valor;
+
     document.getElementById("q1").classList.remove("selected");
     document.getElementById("q2").classList.remove("selected");
-    document.getElementById(q).classList.add("selected");
+
+    elemento.classList.add("selected");
 }
 
-function selFuncao(f){
-    funcao = f;
+function selFuncao(valor, elemento){
+    funcao = valor;
+
     document.getElementById("motorista").classList.remove("selected");
     document.getElementById("seguranca").classList.remove("selected");
-    document.getElementById(f).classList.add("selected");
+
+    elemento.classList.add("selected");
 }
 
 function avancar(){
@@ -84,11 +88,11 @@ function avancar(){
 <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
 </select>
 
-<div id="q1" class="box" onclick="selQuinzena('PrimeiraQuinzena')">01 a 15</div>
-<div id="q2" class="box" onclick="selQuinzena('SegundaQuinzena')">16 a 31</div>
+<div id="q1" class="box" onclick="selQuinzena('PrimeiraQuinzena', this)">01 a 15</div>
+<div id="q2" class="box" onclick="selQuinzena('SegundaQuinzena', this)">16 a 31</div>
 
-<div id="motorista" class="box" onclick="selFuncao('motorista')">Motorista</div>
-<div id="seguranca" class="box" onclick="selFuncao('seguranca')">Segurança</div>
+<div id="motorista" class="box" onclick="selFuncao('motorista', this)">Motorista</div>
+<div id="seguranca" class="box" onclick="selFuncao('seguranca', this)">Segurança</div>
 
 <select id="qtd">
 <option value="">Qtd Serviços</option>
