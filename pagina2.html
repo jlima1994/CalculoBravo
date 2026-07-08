@@ -2,77 +2,77 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Dados Motorista</title>
+<title>Pedágio e KM</title>
 
 <style>
-body {
-    font-family: Arial;
-    text-align: center;
-}
-
-.container {
-    margin-top: 30px;
-}
+body { font-family: Arial; text-align: center; }
 
 .linha {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
     margin: 5px;
 }
 
 input {
-    width: 100px;
-    padding: 5px;
-}
-
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
+    width: 120px;
+    padding: 6px;
 }
 </style>
 
 <script>
-function gerarCampos() {
-    let qtd = localStorage.getItem("qtd");
+function gerar(){
+    let qtd = Number(localStorage.getItem("qtd"));
     let area = document.getElementById("campos");
 
-    for (let i = 0; i < qtd; i++) {
+    for(let i=0;i<qtd;i++){
         area.innerHTML += `
         <div class="linha">
-            <input type="number" placeholder="Pedágio R$" id="ped${i}">
-            <input type="number" placeholder="KM" id="km${i}">
+            <input type="number" step="0.01" placeholder="Valor Pedágios" id="ped${i}">
+            <input type="number" step="0.01" placeholder="KM Total" id="km${i}">
         </div>`;
     }
 }
 
-function calcular() {
-    let qtd = localStorage.getItem("qtd");
+function calcular(){
+    let qtd = Number(localStorage.getItem("qtd"));
+    let funcao = localStorage.getItem("funcao");
+
     let totalPed = 0;
     let totalKm = 0;
 
-    for (let i = 0; i < qtd; i++) {
-        totalPed += Number(document.getElementById("ped"+i).value) || 0;
-        totalKm += Number(document.getElementById("km"+i).value) || 0;
+    for(let i=0;i<qtd;i++){
+        totalPed += parseFloat(document.getElementById("ped"+i).value) || 0;
+        totalKm += parseFloat(document.getElementById("km"+i).value) || 0;
     }
 
-    localStorage.setItem("pedagio", totalPed);
-    localStorage.setItem("km", totalKm);
+    let totalDiarias = qtd * 190;
+    let totalAluguel = funcao === "motorista" ? qtd * 49.5 : 0;
+
+    // ✅ CORREÇÃO GARANTIDA
+    let totalDeslocamento = totalKm * 0.68;
+
+    localStorage.setItem("totalDiarias", totalDiarias);
+    localStorage.setItem("totalAluguel", totalAluguel);
+    localStorage.setItem("totalDeslocamento", totalDeslocamento);
+    localStorage.setItem("totalPedagios", totalPed);
+    localStorage.setItem("totalKm", totalKm);
 
     window.location.href = "resultado.html";
 }
 
-window.onload = gerarCampos;
+window.onload = gerar;
 </script>
 
 </head>
 <body>
 
-<h2>LANÇAMENTOS</h2>
+<h2>Pedágio e Quilometragem</h2>
 
-<div id="campos" class="container"></div>
+<div id="campos"></div>
 
-<button onclick="calcular()">Calcular</button>
+<br>
+<button onclick="calcular()">Mostrar Resultados</button>
 
 </body>
 </html>
