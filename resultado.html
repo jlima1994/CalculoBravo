@@ -2,84 +2,63 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resultado</title>
+
+<style>
+body{
+    font-family: Arial;
+    text-align:center;
+}
+</style>
 </head>
 
 <body>
 
 <h3 id="topo"></h3>
 
-<pre id="resultado"></pre>
-
-<button onclick="copiar()">Copiar</button>
+<pre id="res"></pre>
 
 <script>
 const r = JSON.parse(localStorage.getItem("resultado") || localStorage.getItem("dados"));
 
-function f(v){
-return (v || 0).toFixed(2);
-}
+function f(v){ return (v||0).toFixed(2); }
 
-// meses
+// mês seguinte
 const meses = [
 "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
 "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
 ];
 
-let idx = meses.indexOf(r.mes);
-let proxMes = meses[(idx + 1) % 12];
+let prox = meses[(meses.indexOf(r.mes)+1)%12];
 
-// 🔥 TEXTO DE PAGAMENTO (SUBSTITUI RESULTADO FINAL)
-let topoTexto = (r.dia == "10")
-? `Pagamento a ser realizado dia 10 de ${proxMes}`
-: `Pagamento a ser realizado dia 25 de ${proxMes}`;
-
-document.getElementById("topo").innerText = topoTexto;
+// topo pagamento
+topo.innerText = (r.dia=="10")
+? `Pagamento dia 10 de ${prox}`
+: `Pagamento dia 25 de ${prox}`;
 
 // valores
-let totalDiarias = r.totalDiarias || 0;
-let totalAluguel = r.totalAluguel || 0;
-let totalDeslocamento = r.totalDeslocamento || 0;
-let totalPed = r.totalPed || 0;
+let td = r.totalDiarias||0;
+let ta = r.totalAluguel||0;
+let km = r.totalDeslocamento||0;
+let tp = r.totalPed||0;
 
-let qtdDiarias = r.qtdDiarias || 0;
-let qtdAluguel = r.qtdAluguel || 0;
-let km = r.km || 0;
+let qtdD = r.qtdDiarias||0;
+let qtdA = r.qtdAluguel||0;
+let kmReal = r.km||0;
 
-let totalFinal = totalDiarias + totalAluguel + totalDeslocamento + totalPed;
+let total = td+ta+km+tp;
 
-let linhas = [];
+let linhas=[];
 
-// 🔥 OCULTAR ZERO
-if(totalDiarias > 0){
-linhas.push(`R$ ${f(totalDiarias)}  Total de Diárias (${qtdDiarias})`);
-}
-
-if(totalAluguel > 0){
-linhas.push(`R$ ${f(totalAluguel)}  Total de Aluguel (${qtdAluguel})`);
-}
-
-if(totalDeslocamento > 0){
-linhas.push(`R$ ${f(totalDeslocamento)}  Deslocamento (${km} KM)`);
-}
-
-if(totalPed > 0){
-linhas.push(`R$ ${f(totalPed)}  Pedágios`);
-}
+// oculta zero
+if(td>0) linhas.push(`R$ ${f(td)} DIÁRIAS (${qtdD})`);
+if(ta>0) linhas.push(`R$ ${f(ta)} ALUGUEL (${qtdA})`);
+if(km>0) linhas.push(`R$ ${f(km)} KM (${kmReal})`);
+if(tp>0) linhas.push(`R$ ${f(tp)} PEDÁGIO`);
 
 linhas.push("");
-linhas.push(`R$ ${f(totalFinal)}  Total Geral`);
+linhas.push(`R$ ${f(total)} TOTAL`);
 
-document.getElementById("resultado").innerText = linhas.join("\n");
-
-function copiar(){
-navigator.clipboard.writeText(
-document.getElementById("topo").innerText + "\n\n" +
-document.getElementById("resultado").innerText
-);
-alert("Copiado!");
-}
+res.innerText = linhas.join("\n");
 </script>
 
 </body>
