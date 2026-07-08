@@ -7,106 +7,86 @@
 
 <style>
 body{
-    font-family: Arial;
     background:#111;
     color:#fff;
+    font-family:Arial;
     padding:20px;
-}
-
-h1{
-    text-align:center;
-    margin-bottom:20px;
 }
 
 h2{
     text-align:center;
-    margin-bottom:20px;
     color:#00c853;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+.item{
+    display:flex;
+    justify-content:space-between;
+    margin:10px 0;
 }
 
-th, td{
-    border:1px solid #555;
-    padding:12px;
+.hidden{
+    display:none;
 }
-
-th{
-    background:#222;
-    text-align:center;
-}
-
-td.descricao{
-    text-align:left;
-}
-
-td.valor{
-    text-align:right;
-    white-space:nowrap;
-}
-
 </style>
 </head>
 
 <body>
 
-<h1>RESULTADO</h1>
+<h2 id="total"></h2>
 
-<h2 id="cabecalho"></h2>
-
-<table>
-    <thead>
-        <tr>
-            <th>VALORES</th>
-            <th>TOTAL</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="descricao">PEDÁGIOS</td>
-            <td class="valor" id="pedagio"></td>
-        </tr>
-        <tr>
-            <td class="descricao">KM</td>
-            <td class="valor" id="km"></td>
-        </tr>
-        <tr>
-            <td class="descricao">DIÁRIAS</td>
-            <td class="valor" id="diarias"></td>
-        </tr>
-        <tr>
-            <td class="descricao">ALUGUEL</td>
-            <td class="valor" id="aluguel"></td>
-        </tr>
-    </tbody>
-</table>
+<div id="diariasBox" class="item"></div>
+<div id="aluguelBox" class="item"></div>
+<div id="kmBox" class="item"></div>
+<div id="pedagioBox" class="item"></div>
 
 <script>
 
-// 🔥 PEGAR DADOS
-let totalPedagio = Number(localStorage.getItem("totalPedagio")) || 0;
-let valorKm = Number(localStorage.getItem("valorKm")) || 0;
-let diarias = Number(localStorage.getItem("diarias")) || 0;
-let aluguel = Number(localStorage.getItem("aluguel")) || 0;
-let totalFinal = Number(localStorage.getItem("totalFinal")) || 0;
-
-// 🔥 FORMATAR EM REAL
-function formatar(valor){
-    return "R$ " + valor.toFixed(2).replace(".", ",");
+function moeda(v){
+return "R$ " + v.toFixed(2).replace(".",",");
 }
 
-// 🔥 MOSTRAR NA TELA
-document.getElementById("pedagio").innerText = formatar(totalPedagio);
-document.getElementById("km").innerText = formatar(valorKm);
-document.getElementById("diarias").innerText = formatar(diarias);
-document.getElementById("aluguel").innerText = formatar(aluguel);
+let diarias = Number(localStorage.getItem("diarias")) || 0;
+let aluguel = Number(localStorage.getItem("aluguel")) || 0;
+let km = Number(localStorage.getItem("deslocamento")) || 0;
+let totalKm = Number(localStorage.getItem("totalKm")) || 0;
+let pedagio = Number(localStorage.getItem("pedagios")) || 0;
+let totalFinal = Number(localStorage.getItem("totalFinal")) || 0;
 
-// 🔥 CABEÇALHO
-document.getElementById("cabecalho").innerText =
-"RECEBERÁ " + formatar(totalFinal) + " EM REGRA DO MÊS SEGUINTE";
+// CABEÇALHO
+document.getElementById("total").innerText =
+"RECEBERÁ " + moeda(totalFinal);
+
+// DIARIAS
+if(diarias > 0){
+document.getElementById("diariasBox").innerHTML =
+`<span>DIÁRIAS (${localStorage.getItem("qtdServicos")})</span><span>${moeda(diarias)}</span>`;
+}else{
+diariasBox.classList.add("hidden");
+}
+
+// ALUGUEL
+if(aluguel > 0){
+document.getElementById("aluguelBox").innerHTML =
+`<span>ALUGUEL (${localStorage.getItem("qtdServicos")})</span><span>${moeda(aluguel)}</span>`;
+}else{
+aluguelBox.classList.add("hidden");
+}
+
+// KM
+if(km > 0){
+document.getElementById("kmBox").innerHTML =
+`<span>DESLOCAMENTO (${totalKm} KM)</span><span>${moeda(km)}</span>`;
+}else{
+kmBox.classList.add("hidden");
+}
+
+// PEDAGIO
+if(pedagio > 0){
+document.getElementById("pedagioBox").innerHTML =
+`<span>PEDÁGIOS</span><span>${moeda(pedagio)}</span>`;
+}else{
+pedagioBox.classList.add("hidden");
+}
 
 </script>
 
