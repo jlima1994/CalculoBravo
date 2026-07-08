@@ -2,92 +2,136 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESULTADO</title>
+<title>RESULTADOS</title>
 
 <style>
-body{
-    background:#111;
-    color:#fff;
-    font-family:Arial;
-    padding:20px;
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #111;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-h2{
-    text-align:center;
-    color:#00c853;
+.box {
+    width: 350px;
 }
 
-.item{
-    display:flex;
-    justify-content:space-between;
-    margin:10px 0;
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.hidden{
-    display:none;
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+td {
+    padding: 10px;
+}
+
+.desc {
+    text-align: left;
+}
+
+.valor {
+    text-align: right;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #00c853;
+    border: none;
+    color: white;
+    font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<h2 id="total"></h2>
+<div class="box">
 
-<div id="diariasBox" class="item"></div>
-<div id="aluguelBox" class="item"></div>
-<div id="kmBox" class="item"></div>
-<div id="pedagioBox" class="item"></div>
+<h2 id="titulo"></h2>
+
+<table>
+<thead>
+<tr>
+<th colspan="2">VALORES</th>
+</tr>
+</thead>
+
+<tbody id="tabela"></tbody>
+
+</table>
+
+<button onclick="voltar()">VOLTAR</button>
+
+</div>
 
 <script>
-
-function moeda(v){
-return "R$ " + v.toFixed(2).replace(".",",");
+function moeda(v) {
+    return Number(v).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
 }
 
-let diarias = Number(localStorage.getItem("diarias")) || 0;
-let aluguel = Number(localStorage.getItem("aluguel")) || 0;
-let km = Number(localStorage.getItem("deslocamento")) || 0;
-let totalKm = Number(localStorage.getItem("totalKm")) || 0;
-let pedagio = Number(localStorage.getItem("pedagios")) || 0;
-let totalFinal = Number(localStorage.getItem("totalFinal")) || 0;
+const diarias = parseFloat(localStorage.getItem("diarias")) || 0;
+const aluguel = parseFloat(localStorage.getItem("aluguel")) || 0;
+const km = parseFloat(localStorage.getItem("km")) || 0;
+const pedagios = parseFloat(localStorage.getItem("pedagios")) || 0;
 
-// CABEÇALHO
-document.getElementById("total").innerText =
-"RECEBERÁ " + moeda(totalFinal);
+const mes = localStorage.getItem("mes") || "";
+const quinzena = localStorage.getItem("quinzena") || "";
 
-// DIARIAS
-if(diarias > 0){
-document.getElementById("diariasBox").innerHTML =
-`<span>DIÁRIAS (${localStorage.getItem("qtdServicos")})</span><span>${moeda(diarias)}</span>`;
-}else{
-diariasBox.classList.add("hidden");
+const tabela = document.getElementById("tabela");
+
+// adiciona linha só se valor > 0
+function add(nome, valor) {
+    if (valor > 0) {
+        tabela.innerHTML += `
+        <tr>
+            <td class="desc">${nome}</td>
+            <td class="valor">${moeda(valor)}</td>
+        </tr>`;
+    }
 }
 
-// ALUGUEL
-if(aluguel > 0){
-document.getElementById("aluguelBox").innerHTML =
-`<span>ALUGUEL (${localStorage.getItem("qtdServicos")})</span><span>${moeda(aluguel)}</span>`;
-}else{
-aluguelBox.classList.add("hidden");
-}
+add("DIÁRIAS", diarias);
+add("ALUGUEL", aluguel);
+add("DESLOCAMENTO", km);
+add("PEDÁGIOS", pedagios);
 
-// KM
-if(km > 0){
-document.getElementById("kmBox").innerHTML =
-`<span>DESLOCAMENTO (${totalKm} KM)</span><span>${moeda(km)}</span>`;
-}else{
-kmBox.classList.add("hidden");
-}
+// TOTAL
+const total = diarias + aluguel + km + pedagios;
 
-// PEDAGIO
-if(pedagio > 0){
-document.getElementById("pedagioBox").innerHTML =
-`<span>PEDÁGIOS</span><span>${moeda(pedagio)}</span>`;
-}else{
-pedagioBox.classList.add("hidden");
-}
+tabela.innerHTML += `
+<tr>
+    <td class="desc"><b>TOTAL</b></td>
+    <td class="valor"><b>${moeda(total)}</b></td>
+</tr>
+`;
 
+// título
+document.getElementById("titulo").innerText =
+`${mes} - ${quinzena} \n RECEBERÁ ${moeda(total)}`;
+
+function voltar() {
+    window.location.href = "index.html";
+}
 </script>
 
 </body>
