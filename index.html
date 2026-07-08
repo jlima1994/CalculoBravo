@@ -55,22 +55,48 @@ function selFuncao(valor, elemento){
     elemento.classList.add("selected");
 }
 
+<script>
 function avancar(){
+
     let mes = document.getElementById("mes").value;
+    let quinzena = document.getElementById("quinzena").value;
+    let funcao = document.getElementById("funcao").value;
     let qtd = document.getElementById("qtd").value;
 
     if(!mes || !quinzena || !funcao || !qtd){
-        alert("Preencha tudo");
+        alert("PREENCHA TODOS OS CAMPOS");
         return;
     }
 
+    // salvar dados básicos
     localStorage.setItem("mes", mes);
     localStorage.setItem("quinzena", quinzena);
     localStorage.setItem("funcao", funcao);
-    localStorage.setItem("qtd", qtd);
+    localStorage.setItem("qtdServicos", qtd);
 
-    window.location.href = "pagina2.html";
+    // 🚗 MOTORISTA → vai pra página 2 normal
+    if(funcao === "motorista"){
+        window.location.href = "pagina2.html";
+        return;
+    }
+
+    // 🛡️ SEGURANÇA → calcula direto aqui
+
+    let totalPedagio = 0;
+    let totalKm = 0;
+    let valorKm = 0;
+
+    // se quiser, pode adaptar aqui depois com outras regras de segurança
+
+    // salvar igual página 2 faria
+    localStorage.setItem("totalPedagio", totalPedagio);
+    localStorage.setItem("totalKm", totalKm);
+    localStorage.setItem("valorKm", valorKm);
+
+    // ir direto pro resultado
+    window.location.href = "resultado.html";
 }
+</script>
 </script>
 
 </head>
