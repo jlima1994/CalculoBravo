@@ -7,46 +7,45 @@
 
 <style>
 body{
-    font-family: Arial;
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     background:#111;
     color:#fff;
-    padding:20px;
+    font-family:Arial;
 }
 
-h1{
+.container{
+    width:90%;
+    max-width:400px;
     text-align:center;
 }
 
-label{
-    display:block;
-    margin-top:10px;
-}
-
-select, input{
+select, button{
     width:100%;
-    padding:10px;
-    margin-top:5px;
+    padding:12px;
+    margin-top:10px;
+    font-size:16px;
 }
 
 button{
-    width:100%;
-    padding:12px;
-    margin-top:20px;
     background:#00c853;
     border:none;
     color:#fff;
-    font-size:16px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>SISTEMA DE CÁLCULO</h1>
+<div class="container">
 
-<label>MÊS</label>
+<h2>SISTEMA</h2>
+
 <select id="mes">
-<option value="">SELECIONE</option>
+<option value="">MÊS</option>
 <option>JANEIRO</option>
 <option>FEVEREIRO</option>
 <option>MARÇO</option>
@@ -61,59 +60,64 @@ button{
 <option>DEZEMBRO</option>
 </select>
 
-<label>QUINZENA</label>
 <select id="quinzena">
-<option value="">SELECIONE</option>
+<option value="">QUINZENA</option>
 <option>PRIMEIRA</option>
 <option>SEGUNDA</option>
 </select>
 
-<label>FUNÇÃO</label>
 <select id="funcao">
-<option value="">SELECIONE</option>
+<option value="">FUNÇÃO</option>
 <option value="motorista">MOTORISTA</option>
 <option value="seguranca">SEGURANÇA</option>
 </select>
 
-<label>QUANTIDADE DE SERVIÇOS</label>
-<input type="number" id="qtd" min="1">
+<select id="qtd">
+<option value="">SERVIÇOS</option>
+<script>
+for(let i=1;i<=30;i++){
+document.write(`<option value="${i}">${i}</option>`);
+}
+</script>
+</select>
 
 <button onclick="avancar()">AVANÇAR</button>
+
+</div>
 
 <script>
 function avancar(){
 
-    let mes = document.getElementById("mes").value;
-    let quinzena = document.getElementById("quinzena").value;
-    let funcao = document.getElementById("funcao").value;
-    let qtd = Number(document.getElementById("qtd").value);
+let mes = mes.value;
+let quinzena = quinzena.value;
+let funcao = funcao.value;
+let qtdServicos = Number(qtd.value);
 
-    if(!mes || !quinzena || !funcao || !qtd){
-        alert("PREENCHA TODOS OS CAMPOS");
-        return;
-    }
+if(!mes || !quinzena || !funcao || !qtdServicos){
+alert("PREENCHA TUDO");
+return;
+}
 
-    // limpa tudo
-    localStorage.clear();
+localStorage.clear();
 
-    // salva base
-    localStorage.setItem("mes", mes);
-    localStorage.setItem("quinzena", quinzena);
-    localStorage.setItem("funcao", funcao);
-    localStorage.setItem("qtdServicos", qtd);
+localStorage.setItem("mes", mes);
+localStorage.setItem("quinzena", quinzena);
+localStorage.setItem("funcao", funcao);
+localStorage.setItem("qtdServicos", qtdServicos);
 
-    // 🚗 MOTORISTA
-    if(funcao === "motorista"){
-        window.location.href = "pagina2.html";
-        return;
-    }
+// SEGURANÇA → CALCULA DIRETO
+if(funcao === "seguranca"){
+let total = qtdServicos * 190;
 
-    // 🛡️ SEGURANÇA
-    let totalFinal = qtd * 190;
+localStorage.setItem("diarias", total);
+localStorage.setItem("totalFinal", total);
 
-    localStorage.setItem("totalFinal", totalFinal);
+window.location.href = "resultado.html";
+return;
+}
 
-    window.location.href = "resultado.html";
+// MOTORISTA → PAGINA 2
+window.location.href = "pagina2.html";
 }
 </script>
 
