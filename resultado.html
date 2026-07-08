@@ -8,7 +8,11 @@
 <style>
 body { font-family: Arial; background:#f2f2f2; padding:10px; }
 .container { max-width:500px; margin:auto; background:#fff; padding:15px; border-radius:10px; }
-.result { font-family: monospace; white-space: pre; }
+
+.result {
+    font-family: monospace;
+    white-space: pre;
+}
 </style>
 </head>
 
@@ -31,7 +35,8 @@ const totalFinal = r.totalDiarias + r.totalAluguel + r.totalDeslocamento + r.tot
 const texto =
 `R$ ${f(r.totalDiarias)}  TOTAL DIÁRIAS
 R$ ${f(r.totalAluguel)}  TOTAL ALUGUEL
-R$ ${f(r.totalDeslocamento)}  TOTAL DESLOCAMENTO (KM)
+R$ ${f(r.totalDeslocamento)}  TOTAL DESLOCAMENTO
+KM ${String(r.totalKm).padStart(10)}  KM TOTAL
 R$ ${f(r.totalPed)}  TOTAL PEDÁGIOS
 
 R$ ${f(totalFinal)}  VALOR A RECEBER DIA ${r.dia}`;
