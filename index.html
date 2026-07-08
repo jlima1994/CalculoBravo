@@ -1,37 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CÁLCULO BRAVO</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: Arial;
     background: #111;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    padding: 10px;
 }
 
-.box {
-    width: 300px;
+/* CONTAINER PADRÃO */
+.box, .container {
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
     text-align: center;
 }
 
-select, button {
+/* INPUTS E SELECT */
+select, input, button {
     width: 100%;
     padding: 12px;
-    margin: 8px 0;
-    font-size: 15px;
+    margin: 6px 0;
+    font-size: 16px;
 }
 
+/* BOTÃO */
 button {
     background: #00c853;
     border: none;
     color: white;
+}
+
+/* TABELA */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+td {
+    padding: 8px;
+}
+
+/* ALINHAMENTOS */
+.desc {
+    text-align: left;
+    white-space: nowrap;
+}
+
+.valor {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* INPUT NUMÉRICO */
+input {
+    text-align: right;
 }
 </style>
 </head>
