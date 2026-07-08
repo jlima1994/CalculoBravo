@@ -3,19 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PÁGINA 2</title>
+<title>SERVIÇOS</title>
 
 <style>
 body{
-    font-family: Arial;
     background:#111;
     color:#fff;
+    font-family:Arial;
     padding:15px;
-}
-
-h1{
-    text-align:center;
-    margin-bottom:15px;
 }
 
 table{
@@ -24,116 +19,83 @@ table{
 }
 
 th, td{
-    border:1px solid #555;
+    border:1px solid #444;
     padding:10px;
     text-align:center;
-    white-space:nowrap; /* 🔥 NÃO QUEBRA LINHA */
-}
-
-th{
-    background:#222;
 }
 
 input{
-    width:90px;
+    width:80px;
     padding:5px;
-    text-align:center;
 }
 
 button{
     width:100%;
-    padding:12px;
     margin-top:15px;
+    padding:12px;
     background:#00c853;
     border:none;
     color:#fff;
-    font-size:16px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>SERVIÇOS</h1>
-
 <table>
-    <thead>
-        <tr>
-            <th>PEDÁGIOS</th>
-            <th>KM</th>
-        </tr>
-    </thead>
-    <tbody id="corpoTabela"></tbody>
+<thead>
+<tr>
+<th>KM</th>
+<th>PEDÁGIOS</th>
+</tr>
+</thead>
+<tbody id="tabela"></tbody>
 </table>
 
 <button onclick="calcular()">CALCULAR</button>
 
 <script>
 
-// 🔥 QUANTIDADE VEM DA INDEX
 let qtd = Number(localStorage.getItem("qtdServicos"));
 
-if(!qtd){
-    alert("ERRO - VOLTE PARA O INÍCIO");
-    window.location.href = "index.html";
+let tabela = document.getElementById("tabela");
+
+for(let i=0;i<qtd;i++){
+tabela.innerHTML += `
+<tr>
+<td><input type="number" class="km"></td>
+<td><input type="number" class="pedagio"></td>
+</tr>`;
 }
 
-// 🔥 CRIAR LINHAS
-let corpo = document.getElementById("corpoTabela");
-
-for(let i=0; i<qtd; i++){
-    corpo.innerHTML += `
-    <tr>
-        <td><input type="number" step="0.01" class="pedagio"></td>
-        <td><input type="number" step="0.01" class="km"></td>
-    </tr>
-    `;
-}
-
-// 🔥 CALCULAR
-<script>
 function calcular(){
 
-    let pedagios = document.querySelectorAll(".pedagio");
-    let kms = document.querySelectorAll(".km");
+let kms = document.querySelectorAll(".km");
+let pedagios = document.querySelectorAll(".pedagio");
 
-    let totalPedagio = 0;
-    let totalKm = 0;
+let totalKm = 0;
+let totalPedagio = 0;
 
-    for(let i=0; i<pedagios.length; i++){
-        totalPedagio += parseFloat(pedagios[i].value) || 0;
-        totalKm += parseFloat(kms[i].value) || 0;
-    }
-
-    let qtdServicos = Number(localStorage.getItem("qtdServicos")) || 0;
-
-    let valorKm = totalKm * 0.68;
-    let diarias = qtdServicos * 190;
-    let aluguel = qtdServicos * 49.50;
-
-    let totalFinal = totalPedagio + valorKm + diarias + aluguel;
-
-    // 🔥 SALVAR TUDO COMO NÚMERO
-    localStorage.setItem("totalPedagio", totalPedagio.toFixed(2));
-    localStorage.setItem("totalKm", totalKm.toFixed(2));
-    localStorage.setItem("valorKm", valorKm.toFixed(2));
-    localStorage.setItem("diarias", diarias.toFixed(2));
-    localStorage.setItem("aluguel", aluguel.toFixed(2));
-    localStorage.setItem("totalFinal", totalFinal.toFixed(2));
-
-    // DEBUG (opcional)
-    console.log({
-        totalPedagio,
-        totalKm,
-        valorKm,
-        diarias,
-        aluguel,
-        totalFinal
-    });
-
-    window.location.href = "resultado.html";
+for(let i=0;i<kms.length;i++){
+totalKm += Number(kms[i].value) || 0;
+totalPedagio += Number(pedagios[i].value) || 0;
 }
-</script>
+
+let deslocamento = totalKm * 0.68;
+let diarias = qtd * 190;
+let aluguel = qtd * 49.50;
+
+let totalFinal = deslocamento + totalPedagio + diarias + aluguel;
+
+localStorage.setItem("totalKm", totalKm);
+localStorage.setItem("deslocamento", deslocamento);
+localStorage.setItem("pedagios", totalPedagio);
+localStorage.setItem("diarias", diarias);
+localStorage.setItem("aluguel", aluguel);
+localStorage.setItem("totalFinal", totalFinal);
+
+window.location.href = "resultado.html";
+}
 </script>
 
 </body>
