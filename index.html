@@ -33,9 +33,7 @@ h3 { margin-bottom:5px; }
     background:#f9f9f9;
 }
 
-.select-group input {
-    display:none;
-}
+.select-group input { display:none; }
 
 .select-group input:checked + label {
     background:#007bff;
@@ -121,7 +119,24 @@ function proximo(){
     };
 
     localStorage.setItem("dados", JSON.stringify(dados));
-    window.location.href = "pagina2.html";
+
+    if(dados.funcao === "motorista"){
+        window.location.href = "pagina2.html";
+    } else {
+        const resultado = {
+            totalDiarias: dados.qtd * 190,
+            totalAluguel: 0,
+            totalDeslocamento: 0,
+            totalPed: 0,
+            totalKm: 0,
+            dia: dados.quinzena,
+            qtd: dados.qtd,
+            mes: dados.mes
+        };
+
+        localStorage.setItem("resultado", JSON.stringify(resultado));
+        window.location.href = "resultado.html";
+    }
 }
 </script>
 
