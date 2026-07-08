@@ -3,39 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-font-family: monospace;
-background:#000;
-color:#0f0;
-padding:20px;
-white-space:pre;
-}
-button{
-width:100%;
-padding:15px;
-margin-top:20px;
-font-size:18px;
-}
-</style>
+<title>Resultado</title>
 </head>
 
 <body>
 
-<div id="topo"></div>
+<h3 id="topo"></h3>
 
-<br>
+<pre id="resultado"></pre>
 
-<div id="res"></div>
-
-<button onclick="copiar()">COPIAR RESENHA</button>
+<button onclick="copiar()">Copiar</button>
 
 <script>
 const r = JSON.parse(localStorage.getItem("resultado") || localStorage.getItem("dados"));
 
-function f(v){ return (v||0).toFixed(2).padStart(10); }
+function f(v){
+return (v || 0).toFixed(2);
+}
 
+// meses
 const meses = [
 "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
 "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
@@ -44,55 +30,55 @@ const meses = [
 let idx = meses.indexOf(r.mes);
 let proxMes = meses[(idx + 1) % 12];
 
-// 🔥 PAGAMENTO (SUBSTITUI RESULTADO FINAL)
-let textoTopo = (r.dia == "10")
-? `PAGAMENTO A SER REALIZADO DIA 10 DE ${proxMes.toUpperCase()}`
-: `PAGAMENTO A SER REALIZADO DIA 25 DE ${proxMes.toUpperCase()}`;
+// 🔥 TEXTO DE PAGAMENTO (SUBSTITUI RESULTADO FINAL)
+let topoTexto = (r.dia == "10")
+? `Pagamento a ser realizado dia 10 de ${proxMes}`
+: `Pagamento a ser realizado dia 25 de ${proxMes}`;
 
-document.getElementById("topo").innerText = textoTopo;
+document.getElementById("topo").innerText = topoTexto;
 
-// valores padrão (caso segurança)
+// valores
 let totalDiarias = r.totalDiarias || 0;
 let totalAluguel = r.totalAluguel || 0;
 let totalDeslocamento = r.totalDeslocamento || 0;
 let totalPed = r.totalPed || 0;
-let qtd = r.qtd || 0;
-let km = r.totalKm || 0;
+
+let qtdDiarias = r.qtdDiarias || 0;
+let qtdAluguel = r.qtdAluguel || 0;
+let km = r.km || 0;
 
 let totalFinal = totalDiarias + totalAluguel + totalDeslocamento + totalPed;
 
 let linhas = [];
 
-// 🔥 OCULTA ZERO
+// 🔥 OCULTAR ZERO
 if(totalDiarias > 0){
-linhas.push(`R$ ${f(totalDiarias)}  TOTAL DIÁRIAS (${qtd})`);
+linhas.push(`R$ ${f(totalDiarias)}  Total de Diárias (${qtdDiarias})`);
 }
 
 if(totalAluguel > 0){
-linhas.push(`R$ ${f(totalAluguel)}  TOTAL ALUGUEL (${qtd})`);
+linhas.push(`R$ ${f(totalAluguel)}  Total de Aluguel (${qtdAluguel})`);
 }
 
 if(totalDeslocamento > 0){
-linhas.push(`R$ ${f(totalDeslocamento)}  TOTAL DESLOCAMENTO (${km} KM)`);
+linhas.push(`R$ ${f(totalDeslocamento)}  Deslocamento (${km} KM)`);
 }
 
 if(totalPed > 0){
-linhas.push(`R$ ${f(totalPed)}  TOTAL PEDÁGIOS`);
+linhas.push(`R$ ${f(totalPed)}  Pedágios`);
 }
 
-// total
 linhas.push("");
-linhas.push(`R$ ${f(totalFinal)}  TOTAL GERAL`);
+linhas.push(`R$ ${f(totalFinal)}  Total Geral`);
 
-document.getElementById("res").innerText = linhas.join("\n");
+document.getElementById("resultado").innerText = linhas.join("\n");
 
-// copiar
 function copiar(){
 navigator.clipboard.writeText(
 document.getElementById("topo").innerText + "\n\n" +
-document.getElementById("res").innerText
+document.getElementById("resultado").innerText
 );
-alert("COPIADO!");
+alert("Copiado!");
 }
 </script>
 
