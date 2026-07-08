@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -51,16 +50,15 @@ button {
 }
 
 .result {
-    background: #fafafa;
+    background: #fff;
+    padding: 15px;
     margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
     font-family: monospace;
     white-space: pre;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: normal; /* SEM NEGRITO */
 }
 </style>
-
 </head>
 
 <body>
@@ -69,15 +67,25 @@ button {
 
 <h2>VALOR A RECEBER</h2>
 
-<label>Data:</label> <input type="date" id="data">
+<label>Data:</label>
+<input type="date" id="data">
 
-<label>Quantidade de Serviços:</label> <select id="qtdServicos" onchange="gerarCampos()"> <option value="">Selecione</option> <option value="1">1 serviço</option> <option value="2">2 serviços</option> <option value="3">3 serviços</option> <option value="4">4 serviços</option> </select>
+<label>Quantidade de Serviços:</label>
+<select id="qtdServicos" onchange="gerarCampos()">
+    <option value="">Selecione</option>
+    <option value="1">1 serviço</option>
+    <option value="2">2 serviços</option>
+    <option value="3">3 serviços</option>
+    <option value="4">4 serviços</option>
+</select>
 
 <div id="servicos"></div>
 
-<label>Valor KM (R$):</label> <input type="number" id="valorKm" value="1.5">
+<label>Valor KM (R$):</label>
+<input type="number" id="valorKm" value="1.5">
 
-<label>Total Pedágio (R$):</label> <input type="number" id="pedagio" value="0">
+<label>Total Pedágio (R$):</label>
+<input type="number" id="pedagio" value="0">
 
 <button onclick="calcular()">CALCULAR</button>
 
@@ -109,6 +117,10 @@ function formatarData(data) {
     return partes[2] + '/' + partes[1] + '/' + partes[0];
 }
 
+function f(v){
+    return v.toFixed(2).padStart(10); // alinhamento
+}
+
 function calcular() {
     const qtd = document.getElementById('qtdServicos').value;
     const valorKm = parseFloat(document.getElementById('valorKm').value) || 0;
@@ -125,10 +137,6 @@ function calcular() {
 
     const totalDeslocamento = totalKm * valorKm;
     const totalFinal = totalServicos + totalDeslocamento + pedagio;
-
-    function f(v){
-        return v.toFixed(2).padStart(10);
-    }
 
     const texto =
 `R$ ${f(totalServicos)}  TOTAL SERVIÇOS
