@@ -2,58 +2,86 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Calcular Quinzena</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INÍCIO</title>
 
 <style>
-body {
+body{
     font-family: Arial;
-    text-align: center;
+    background:#111;
+    color:#fff;
+    padding:20px;
 }
 
-.container {
-    margin-top: 40px;
+h1{
+    text-align:center;
+    margin-bottom:20px;
 }
 
-select, .box {
-    width: 240px;
-    margin: 8px auto;
-    display: block;
-    padding: 10px;
-    font-size: 15px;
+label{
+    display:block;
+    margin-top:10px;
 }
 
-.box {
-    border: 1px solid #000;
-    cursor: pointer;
+select, input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    font-size:16px;
 }
 
-.selected {
-    background: #000;
-    color: #fff;
+button{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    font-size:16px;
+    background:#00c853;
+    border:none;
+    color:#fff;
+    border-radius:5px;
 }
 </style>
+</head>
 
-<script>
-let quinzena = "";
-let funcao = "";
+<body>
 
-function selQuinzena(valor, elemento){
-    quinzena = valor;
+<h1>SISTEMA DE CÁLCULO</h1>
 
-    document.getElementById("q1").classList.remove("selected");
-    document.getElementById("q2").classList.remove("selected");
+<label>MÊS</label>
+<select id="mes">
+    <option value="">SELECIONE</option>
+    <option>JANEIRO</option>
+    <option>FEVEREIRO</option>
+    <option>MARÇO</option>
+    <option>ABRIL</option>
+    <option>MAIO</option>
+    <option>JUNHO</option>
+    <option>JULHO</option>
+    <option>AGOSTO</option>
+    <option>SETEMBRO</option>
+    <option>OUTUBRO</option>
+    <option>NOVEMBRO</option>
+    <option>DEZEMBRO</option>
+</select>
 
-    elemento.classList.add("selected");
-}
+<label>QUINZENA</label>
+<select id="quinzena">
+    <option value="">SELECIONE</option>
+    <option>PRIMEIRA</option>
+    <option>SEGUNDA</option>
+</select>
 
-function selFuncao(valor, elemento){
-    funcao = valor;
+<label>FUNÇÃO</label>
+<select id="funcao">
+    <option value="">SELECIONE</option>
+    <option value="motorista">MOTORISTA</option>
+    <option value="seguranca">SEGURANÇA</option>
+</select>
 
-    document.getElementById("motorista").classList.remove("selected");
-    document.getElementById("seguranca").classList.remove("selected");
+<label>QUANTIDADE DE SERVIÇOS</label>
+<input type="number" id="qtd" min="1" placeholder="EX: 5">
 
-    elemento.classList.add("selected");
-}
+<button onclick="avancar()">AVANÇAR</button>
 
 <script>
 function avancar(){
@@ -61,77 +89,43 @@ function avancar(){
     let mes = document.getElementById("mes").value;
     let quinzena = document.getElementById("quinzena").value;
     let funcao = document.getElementById("funcao").value;
-    let qtd = document.getElementById("qtd").value;
+    let qtd = Number(document.getElementById("qtd").value);
 
     if(!mes || !quinzena || !funcao || !qtd){
         alert("PREENCHA TODOS OS CAMPOS");
         return;
     }
 
-    // salvar dados básicos
+    // 🔥 LIMPAR DADOS ANTIGOS (IMPORTANTE)
+    localStorage.clear();
+
+    // 🔥 SALVAR BASE
     localStorage.setItem("mes", mes);
     localStorage.setItem("quinzena", quinzena);
     localStorage.setItem("funcao", funcao);
     localStorage.setItem("qtdServicos", qtd);
 
-    // 🚗 MOTORISTA → vai pra página 2 normal
+    // 🚗 MOTORISTA → VAI PRA PÁGINA 2
     if(funcao === "motorista"){
         window.location.href = "pagina2.html";
         return;
     }
 
-    // 🛡️ SEGURANÇA → calcula direto aqui
+    // 🛡️ SEGURANÇA → CALCULA DIRETO
+    // 🔥 REGRA (AJUSTE AQUI SE QUISER)
+    let valorPorServico = 150; // você pode mudar depois
+    let totalFinal = qtd * valorPorServico;
 
-    let totalPedagio = 0;
-    let totalKm = 0;
-    let valorKm = 0;
-
-    // se quiser, pode adaptar aqui depois com outras regras de segurança
-
-    // salvar igual página 2 faria
-    localStorage.setItem("totalPedagio", totalPedagio);
-    localStorage.setItem("totalKm", totalKm);
-    localStorage.setItem("valorKm", valorKm);
+    // salvar padrão do sistema
+    localStorage.setItem("totalPedagio", 0);
+    localStorage.setItem("totalKm", 0);
+    localStorage.setItem("valorKm", 0);
+    localStorage.setItem("totalFinal", totalFinal);
 
     // ir direto pro resultado
     window.location.href = "resultado.html";
 }
 </script>
-</script>
-
-</head>
-<body>
-
-<div class="container">
-
-<h2>Calcular Quinzena</h2>
-
-<select id="mes">
-<option value="">Mês Trabalhado</option>
-<option>Janeiro</option><option>Fevereiro</option><option>Março</option>
-<option>Abril</option><option>Maio</option><option>Junho</option>
-<option>Julho</option><option>Agosto</option><option>Setembro</option>
-<option>Outubro</option><option>Novembro</option><option>Dezembro</option>
-</select>
-
-<div id="q1" class="box" onclick="selQuinzena('PrimeiraQuinzena', this)">01 a 15</div>
-<div id="q2" class="box" onclick="selQuinzena('SegundaQuinzena', this)">16 a 31</div>
-
-<div id="motorista" class="box" onclick="selFuncao('motorista', this)">Motorista</div>
-<div id="seguranca" class="box" onclick="selFuncao('seguranca', this)">Segurança</div>
-
-<select id="qtd">
-<option value="">Qtd Serviços</option>
-<script>
-for(let i=1;i<=30;i++){
-document.write(`<option value="${i}">${i}</option>`)
-}
-</script>
-</select>
-
-<button onclick="avancar()">Avançar</button>
-
-</div>
 
 </body>
 </html>
