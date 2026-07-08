@@ -35,8 +35,7 @@ const totalFinal = r.totalDiarias + r.totalAluguel + r.totalDeslocamento + r.tot
 const texto =
 `R$ ${f(r.totalDiarias)}  TOTAL DIÁRIAS
 R$ ${f(r.totalAluguel)}  TOTAL ALUGUEL
-R$ ${f(r.totalDeslocamento)}  TOTAL DESLOCAMENTO
-KM ${String(r.totalKm).padStart(10)}  KM TOTAL
+R$ ${f(r.totalDeslocamento)}  TOTAL DESLOCAMENTO (${r.totalKm} KM)
 R$ ${f(r.totalPed)}  TOTAL PEDÁGIOS
 
 R$ ${f(totalFinal)}  VALOR A RECEBER DIA ${r.dia}`;
