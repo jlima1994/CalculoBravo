@@ -11,31 +11,39 @@ body {
 }
 
 .container {
-    margin-top: 40px;
+    margin-top: 50px;
+}
+
+.linha {
+    margin: 8px 0;
+    font-size: 18px;
 }
 </style>
 
 <script>
+function formatar(valor) {
+    return valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+}
+
 function proximoMes(mes) {
     const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
                    "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-
     let i = meses.indexOf(mes);
     return meses[(i+1) % 12];
 }
 
 function carregar() {
+
     let mes = localStorage.getItem("mes");
     let periodo = localStorage.getItem("periodo");
     let funcao = localStorage.getItem("funcao");
     let qtd = Number(localStorage.getItem("qtd"));
+
     let pedagio = Number(localStorage.getItem("pedagio")) || 0;
     let km = Number(localStorage.getItem("km")) || 0;
 
     let diaria = qtd * 200;
     let aluguel = funcao === "motorista" ? qtd * 100 : 0;
-
-    let total = diaria + aluguel + pedagio;
 
     let pagamento = periodo == 1 
         ? `Pagamento em 10 de ${proximoMes(mes)}`
@@ -45,15 +53,18 @@ function carregar() {
     html += `<h3>${pagamento}</h3><br>`;
 
     if (diaria > 0)
-        html += `Diárias: R$ ${diaria} (${qtd})<br>`;
+        html += `<div class="linha">${formatar(diaria)} Diarias (${qtd})</div>`;
 
     if (aluguel > 0)
-        html += `Aluguel: R$ ${aluguel} (${qtd})<br>`;
+        html += `<div class="linha">${formatar(aluguel)} Aluguel (${qtd})</div>`;
+
+    if (km > 0)
+        html += `<div class="linha">${formatar(km)} Deslocamento (${km} KM)</div>`;
 
     if (pedagio > 0)
-        html += `Pedágio: R$ ${pedagio}<br>`;
+        html += `<div class="linha">${formatar(pedagio)} Pedágios</div>`;
 
-    html += `<br>Total: R$ ${total} (${km} KM)</div>`;
+    html += `</div>`;
 
     document.body.innerHTML = html;
 }
@@ -63,6 +74,5 @@ window.onload = carregar;
 
 </head>
 <body>
-
 </body>
 </html>
