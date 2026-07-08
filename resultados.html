@@ -126,8 +126,24 @@ tabela.innerHTML += `
 `;
 
 // título
+const meses = [
+"JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO",
+"JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO","DEZEMBRO"
+];
+
+let indice = meses.indexOf(mes);
+let mesSeguinte = meses[(indice + 1) % 12];
+
+let regra = "";
+
+if (quinzena === "PRIMEIRA") {
+    regra = `10 DO MES DE ${mesSeguinte}`;
+} else {
+    regra = `25 DO MES DE ${mesSeguinte}`;
+}
+
 document.getElementById("titulo").innerText =
-`${mes} - ${quinzena} \n RECEBERÁ ${moeda(total)}`;
+`VOCÊ RECEBERA EM ${regra} O VALOR DE R$ ${moeda(total)}`;
 
 function voltar() {
     window.location.href = "index.html";
