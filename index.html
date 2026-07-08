@@ -4,58 +4,122 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistema</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h3{
+    margin-top: 25px;
+}
+
+/* caixas estilo antigo */
+.box{
+    border: 2px solid #000;
+    padding: 15px;
+    margin: 8px auto;
+    width: 85%;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+/* selecionado */
+.selected{
+    background: #000;
+    color: #fff;
+}
+
+/* botão */
+button{
+    margin-top: 30px;
+    padding: 15px;
+    width: 85%;
+    font-size: 16px;
+}
+</style>
 </head>
 
 <body>
 
-<h3>Mês</h3>
-<select id="mes">
-<option>Janeiro</option>
-<option>Fevereiro</option>
-<option>Março</option>
-<option>Abril</option>
-<option>Maio</option>
-<option>Junho</option>
-<option>Julho</option>
-<option>Agosto</option>
-<option>Setembro</option>
-<option>Outubro</option>
-<option>Novembro</option>
-<option>Dezembro</option>
-</select>
+<h3>MÊS</h3>
 
-<h3>Período</h3>
-<select id="periodo">
-<option value="10">1 a 15</option>
-<option value="25">16 a 31</option>
-</select>
+<div class="box" onclick="selecionar('mes','Janeiro',this)">Janeiro</div>
+<div class="box" onclick="selecionar('mes','Fevereiro',this)">Fevereiro</div>
+<div class="box" onclick="selecionar('mes','Março',this)">Março</div>
+<div class="box" onclick="selecionar('mes','Abril',this)">Abril</div>
+<div class="box" onclick="selecionar('mes','Maio',this)">Maio</div>
+<div class="box" onclick="selecionar('mes','Junho',this)">Junho</div>
+<div class="box" onclick="selecionar('mes','Julho',this)">Julho</div>
+<div class="box" onclick="selecionar('mes','Agosto',this)">Agosto</div>
+<div class="box" onclick="selecionar('mes','Setembro',this)">Setembro</div>
+<div class="box" onclick="selecionar('mes','Outubro',this)">Outubro</div>
+<div class="box" onclick="selecionar('mes','Novembro',this)">Novembro</div>
+<div class="box" onclick="selecionar('mes','Dezembro',this)">Dezembro</div>
 
-<h3>Função</h3>
-<select id="funcao">
-<option value="motorista">Motorista</option>
-<option value="seguranca">Segurança</option>
-</select>
+<h3>PERÍODO</h3>
 
-<br><br>
-<button onclick="continuar()">Continuar</button>
+<div class="box" onclick="selecionar('dia','10',this)">1 A 15</div>
+<div class="box" onclick="selecionar('dia','25',this)">16 A 31</div>
+
+<h3>FUNÇÃO</h3>
+
+<div class="box" onclick="selecionar('funcao','motorista',this)">MOTORISTA</div>
+<div class="box" onclick="selecionar('funcao','seguranca',this)">SEGURANÇA</div>
+
+<button onclick="continuar()">CONTINUAR</button>
 
 <script>
+let dados = {};
+
+// controla seleção por grupo
+function selecionar(tipo, valor, el){
+
+    dados[tipo] = valor;
+
+    // limpa seleção do mesmo grupo
+    let grupo = el.parentNode.querySelectorAll(".box");
+
+    grupo.forEach(item=>{
+        if(item.innerText === el.innerText){
+            item.classList.add("selected");
+        }
+    });
+
+    // remove seleção de outros do mesmo tipo
+    document.querySelectorAll(".box").forEach(item=>{
+        if(item !== el && item.innerText === el.innerText){
+            item.classList.remove("selected");
+        }
+    });
+
+    // garante apenas 1 por tipo
+    document.querySelectorAll(".box").forEach(item=>{
+        if(item !== el && item.getAttribute("onclick").includes(tipo)){
+            item.classList.remove("selected");
+        }
+    });
+
+    el.classList.add("selected");
+}
+
 function continuar(){
 
-const dados = {
-mes: document.getElementById("mes").value,
-dia: document.getElementById("periodo").value,
-funcao: document.getElementById("funcao").value
-};
+    if(!dados.mes || !dados.dia || !dados.funcao){
+        alert("Preencha todas as opções");
+        return;
+    }
 
-localStorage.setItem("dados", JSON.stringify(dados));
+    localStorage.setItem("dados", JSON.stringify(dados));
 
-// REGRA: só motorista vai pra página 2
-if(dados.funcao === "motorista"){
-    window.location.href = "pagina2.html";
-}else{
-    window.location.href = "resultado.html";
-}
+    // regra motorista
+    if(dados.funcao === "motorista"){
+        window.location.href = "pagina2.html";
+    }else{
+        window.location.href = "resultado.html";
+    }
 }
 </script>
 
