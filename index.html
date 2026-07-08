@@ -2,127 +2,107 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>CÁLCULO BRAVO</title>
+<title>PREENCHIMENTO</title>
 
 <style>
 body {
     font-family: Arial;
     background: #111;
     color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
     text-align: center;
-    width: 300px;
+    padding: 20px;
 }
 
-select, button {
+table {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    font-size: 16px;
+    max-width: 400px;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+}
+
+th {
+    text-align: center;
+}
+
+td input {
+    width: 100%;
+    padding: 8px;
+    text-align: right;
 }
 
 button {
+    margin-top: 20px;
+    padding: 12px;
+    width: 200px;
     background: #00c853;
     border: none;
     color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #00e676;
+    font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<h2>PREENCHER DADOS</h2>
 
-<h2>CÁLCULO BRAVO</h2>
+<table>
+    <thead>
+        <tr>
+            <th>PEDÁGIOS (R$)</th>
+            <th>KM</th>
+        </tr>
+    </thead>
+    <tbody id="linhas"></tbody>
+</table>
 
-<select id="mes">
-    <option value="">SELECIONE O MÊS</option>
-    <option>JANEIRO</option>
-    <option>FEVEREIRO</option>
-    <option>MARÇO</option>
-    <option>ABRIL</option>
-    <option>MAIO</option>
-    <option>JUNHO</option>
-    <option>JULHO</option>
-    <option>AGOSTO</option>
-    <option>SETEMBRO</option>
-    <option>OUTUBRO</option>
-    <option>NOVEMBRO</option>
-    <option>DEZEMBRO</option>
-</select>
-
-<select id="quinzena">
-    <option value="">QUINZENA</option>
-    <option>PRIMEIRA</option>
-    <option>SEGUNDA</option>
-</select>
-
-<select id="funcao">
-    <option value="">FUNÇÃO</option>
-    <option value="motorista">MOTORISTA</option>
-    <option value="seguranca">SEGURANÇA</option>
-</select>
-
-<select id="qtd">
-    <option value="">QTD SERVIÇOS</option>
-</select>
-
-<button onclick="avancar()">AVANÇAR</button>
-
-</div>
+<button onclick="calcular()">CALCULAR</button>
 
 <script>
-// Preenche quantidade de serviços
-const selectQtd = document.getElementById("qtd");
-for (let i = 1; i <= 30; i++) {
-    let opt = document.createElement("option");
-    opt.value = i;
-    opt.text = i;
-    selectQtd.appendChild(opt);
+const qtd = parseInt(localStorage.getItem("qtd")) || 0;
+const container = document.getElementById("linhas");
+
+// CRIA LINHAS DINAMICAMENTE
+for (let i = 0; i < qtd; i++) {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+        <td><input type="number" step="0.01" placeholder="0.00" class="pedagio"></td>
+        <td><input type="number" step="0.01" placeholder="0.00" class="km"></td>
+    `;
+
+    container.appendChild(tr);
 }
 
-function avancar() {
-    const mes = document.getElementById("mes").value;
-    const quinzena = document.getElementById("quinzena").value;
-    const funcao = document.getElementById("funcao").value;
-    const qtd = document.getElementById("qtd").value;
+function calcular() {
+    let pedagios = 0;
+    let km = 0;
 
-    if (!mes || !quinzena || !funcao || !qtd) {
-        alert("PREENCHA TODOS OS CAMPOS");
-        return;
-    }
+    document.querySelectorAll(".pedagio").forEach(el => {
+        pedagios += parseFloat(el.value) || 0;
+    });
 
-    // SALVA DADOS
-    localStorage.setItem("mes", mes);
-    localStorage.setItem("quinzena", quinzena);
-    localStorage.setItem("funcao", funcao);
-    localStorage.setItem("qtd", qtd);
+    document.querySelectorAll(".km").forEach(el => {
+        km += parseFloat(el.value) || 0;
+    });
 
-    // FLUXO
-    if (funcao === "motorista") {
-        window.location.href = "pagina2.html";
-    } else {
-        // SEGURANÇA → CALCULA DIRETO
-        const total = qtd * 190;
+    const qtdServ = parseInt(localStorage.getItem("qtd"));
 
-        localStorage.setItem("diarias", total);
-        localStorage.setItem("aluguel", 0);
-        localStorage.setItem("km", 0);
-        localStorage.setItem("pedagios", 0);
+    const valorKm = km * 0.68;
+    const diarias = qtdServ * 190;
+    const aluguel = qtdServ * 49.5;
 
-        window.location.href = "resultados.html";
-    }
+    // SALVA RESULTADOS
+    localStorage.setItem("pedagios", pedagios.toFixed(2));
+    localStorage.setItem("km", valorKm.toFixed(2));
+    localStorage.setItem("diarias", diarias.toFixed(2));
+    localStorage.setItem("aluguel", aluguel.toFixed(2));
+
+    window.location.href = "resultados.html";
 }
 </script>
 
