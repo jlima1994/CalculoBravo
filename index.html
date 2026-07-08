@@ -16,9 +16,34 @@ body { font-family: Arial; background:#f2f2f2; padding:10px; }
     margin-top:10px;
 }
 
-h3 { margin:0 0 5px 0; font-size:16px; }
+h3 { margin-bottom:5px; }
 
-select, input, button {
+.select-group {
+    display:flex;
+    gap:5px;
+}
+
+.select-group label {
+    flex:1;
+    text-align:center;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    cursor:pointer;
+    background:#f9f9f9;
+}
+
+.select-group input {
+    display:none;
+}
+
+.select-group input:checked + label {
+    background:#007bff;
+    color:#fff;
+    border-color:#007bff;
+}
+
+select, button {
     width:100%;
     padding:8px;
     margin-top:5px;
@@ -39,7 +64,7 @@ button {
 <h2>CALCULAR QUINZENA</h2>
 
 <div class="box">
-<h3>MÊS TRABALHADO</h3>
+<h3>MÊS</h3>
 <select id="mes">
 <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
 <option>Abril</option><option>Maio</option><option>Junho</option>
@@ -50,14 +75,24 @@ button {
 
 <div class="box">
 <h3>QUINZENA</h3>
-<input type="radio" name="quinzena" value="10"> 01 a 15<br>
-<input type="radio" name="quinzena" value="25"> 16 a 31
+<div class="select-group">
+    <input type="radio" id="q1" name="quinzena" value="10">
+    <label for="q1">01–15</label>
+
+    <input type="radio" id="q2" name="quinzena" value="25">
+    <label for="q2">16–31</label>
+</div>
 </div>
 
 <div class="box">
 <h3>FUNÇÃO</h3>
-<input type="radio" name="funcao" value="motorista"> Motorista<br>
-<input type="radio" name="funcao" value="seguranca"> Segurança
+<div class="select-group">
+    <input type="radio" id="f1" name="funcao" value="motorista">
+    <label for="f1">Motorista</label>
+
+    <input type="radio" id="f2" name="funcao" value="seguranca">
+    <label for="f2">Segurança</label>
+</div>
 </div>
 
 <div class="box">
