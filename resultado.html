@@ -13,7 +13,22 @@ body {
 
 .container {
     margin-top: 40px;
-    width: 340px;
+    width: 360px;
+    text-transform: uppercase;
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Cabeçalho da tabela */
+.header {
+    display: flex;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .linha {
@@ -22,15 +37,22 @@ body {
 }
 
 .valor {
-    width: 50%;
+    width: 40%;
     text-align: right;
     padding-right: 10px;
+    white-space: nowrap;
 }
 
 .desc {
-    width: 50%;
+    width: 60%;
     text-align: left;
     padding-left: 10px;
+    white-space: nowrap;
+}
+
+/* Destaque total */
+.total {
+    font-weight: bold;
 }
 </style>
 
@@ -40,15 +62,15 @@ function formatar(v){
 }
 
 function proximoMes(mes){
-    const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-                   "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-    let i = meses.indexOf(mes);
+    const meses = ["JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO",
+                   "JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO","DEZEMBRO"];
+    let i = meses.indexOf(mes.toUpperCase());
     return meses[(i + 1) % 12];
 }
 
 function carregar(){
 
-    let mes = localStorage.getItem("mes");
+    let mes = (localStorage.getItem("mes") || "").toUpperCase();
     let q = localStorage.getItem("quinzena");
 
     let d = Number(localStorage.getItem("totalDiarias")) || 0;
@@ -60,21 +82,32 @@ function carregar(){
     let total = d + a + des + ped;
 
     let dataPagamento = q === "PrimeiraQuinzena"
-        ? `Receber em: 10 de ${proximoMes(mes)}`
-        : `Receber em: 25 de ${proximoMes(mes)}`;
+        ? `10 DE ${proximoMes(mes)}`
+        : `25 DE ${proximoMes(mes)}`;
 
     let html = `<div class="container">`;
 
-    html += `<h3>${dataPagamento}</h3>`;
+    /* CABEÇALHO PRINCIPAL */
+    html += `<h3>RECEBERÁ ${formatar(total)} EM ${dataPagamento}</h3>`;
 
-    html += `<div class="linha"><div class="valor">${formatar(d)}</div><div class="desc">Total Diárias</div></div>`;
-    html += `<div class="linha"><div class="valor">${formatar(a)}</div><div class="desc">Total Aluguel</div></div>`;
-    html += `<div class="linha"><div class="valor">${formatar(des)}</div><div class="desc">Total Deslocamento (${km} KM)</div></div>`;
-    html += `<div class="linha"><div class="valor">${formatar(ped)}</div><div class="desc">Total Pedágios</div></div>`;
+    /* CABEÇALHO TABELA */
+    html += `
+    <div class="header">
+        <div class="valor">VALORES</div>
+        <div class="desc">DESCRIÇÃO</div>
+    </div>
+    `;
+
+    /* LINHAS */
+    html += `<div class="linha"><div class="valor">${formatar(d)}</div><div class="desc">DIÁRIAS</div></div>`;
+    html += `<div class="linha"><div class="valor">${formatar(a)}</div><div class="desc">ALUGUEL</div></div>`;
+    html += `<div class="linha"><div class="valor">${formatar(des)}</div><div class="desc">DESLOCAMENTO (${km} KM)</div></div>`;
+    html += `<div class="linha"><div class="valor">${formatar(ped)}</div><div class="desc">PEDÁGIOS</div></div>`;
 
     html += `<hr>`;
 
-    html += `<div class="linha"><div class="valor"><strong>${formatar(total)}</strong></div><div class="desc"><strong>Total</strong></div></div>`;
+    /* TOTAL */
+    html += `<div class="linha total"><div class="valor">${formatar(total)}</div><div class="desc">TOTAL</div></div>`;
 
     html += `</div>`;
 
