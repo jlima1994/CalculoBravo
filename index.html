@@ -3,27 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SISTEMA</title>
-
-<style>
-body{
-font-family: monospace;
-background:#000;
-color:#0f0;
-padding:20px;
-}
-select, button{
-width:100%;
-padding:15px;
-margin-top:15px;
-font-size:18px;
-}
-</style>
+<title>Sistema</title>
 </head>
 
 <body>
 
-<h2>MÊS</h2>
+<h3>Mês</h3>
 <select id="mes">
 <option>Janeiro</option>
 <option>Fevereiro</option>
@@ -39,34 +24,37 @@ font-size:18px;
 <option>Dezembro</option>
 </select>
 
-<h2>PERÍODO</h2>
+<h3>Período</h3>
 <select id="periodo">
-<option value="10">1 A 15</option>
-<option value="25">16 A 31</option>
+<option value="10">1 a 15</option>
+<option value="25">16 a 31</option>
 </select>
 
-<h2>FUNÇÃO</h2>
+<h3>Função</h3>
 <select id="funcao">
-<option value="motorista">MOTORISTA</option>
-<option value="seguranca">SEGURANÇA</option>
+<option value="motorista">Motorista</option>
+<option value="seguranca">Segurança</option>
 </select>
 
-<button onclick="ir()">CONTINUAR</button>
+<br><br>
+<button onclick="continuar()">Continuar</button>
 
 <script>
-function ir(){
-const funcao = document.getElementById("funcao").value;
+function continuar(){
 
-localStorage.setItem("dados", JSON.stringify({
+const dados = {
 mes: document.getElementById("mes").value,
 dia: document.getElementById("periodo").value,
-funcao
-}));
+funcao: document.getElementById("funcao").value
+};
 
-if(funcao === "motorista"){
-window.location = "pagina2.html";
+localStorage.setItem("dados", JSON.stringify(dados));
+
+// REGRA: só motorista vai pra página 2
+if(dados.funcao === "motorista"){
+    window.location.href = "pagina2.html";
 }else{
-window.location = "resultado.html";
+    window.location.href = "resultado.html";
 }
 }
 </script>
