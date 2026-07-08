@@ -5,29 +5,46 @@
 <title>RESULTADOS</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: Arial;
     background: #111;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    padding: 10px;
 }
 
-.box {
-    width: 350px;
-}
-
-h2 {
+/* CONTAINER PADRÃO */
+.box, .container {
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
     text-align: center;
-    margin-bottom: 20px;
 }
 
+/* INPUTS E SELECT */
+select, input, button {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    font-size: 16px;
+}
+
+/* BOTÃO */
+button {
+    background: #00c853;
+    border: none;
+    color: white;
+}
+
+/* TABELA */
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px;
 }
 
 th {
@@ -37,25 +54,23 @@ th {
 }
 
 td {
-    padding: 10px;
+    padding: 8px;
 }
 
+/* ALINHAMENTOS */
 .desc {
     text-align: left;
+    white-space: nowrap;
 }
 
 .valor {
     text-align: right;
+    white-space: nowrap;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background: #00c853;
-    border: none;
-    color: white;
-    font-size: 16px;
+/* INPUT NUMÉRICO */
+input {
+    text-align: right;
 }
 </style>
 </head>
