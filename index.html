@@ -1,8 +1,88 @@
-SUBSTITUA A PARTE DA PÁGINA 1 POR ESTA:
+<!-- CSS ADICIONE/ATUALIZE -->
 
-<!-- PAGINA 1 -->
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+}
 
-<div id="page1">
+.container {
+    padding: 15px;
+    max-width: 500px;
+    margin: auto;
+}
+
+h2 {
+    text-align: center;
+}
+
+/* CAMPOS */
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* BOTÃO */
+button {
+    width: 100%;
+    padding: 14px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+/* GRUPOS MODERNOS */
+.opcoes {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.opcao {
+    flex: 1;
+}
+
+.opcao input {
+    display: none;
+}
+
+.opcao label {
+    display: block;
+    padding: 12px;
+    text-align: center;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+/* SELECIONADO */
+.opcao input:checked + label {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+/* MOBILE AJUSTE */
+@media (max-width: 400px) {
+    .opcoes {
+        flex-direction: column;
+    }
+}
+</style>
+
+<!-- PAGINA 1 NOVA -->
+
+<div id="page1" class="container">
 <h2>CALCULAR QUINZENA</h2>
 
 <label>MÊS TRABALHADO</label> <select id="mes">
@@ -17,16 +97,28 @@ SUBSTITUA A PARTE DA PÁGINA 1 POR ESTA:
 
 <label>QUINZENA</label>
 
-<div class="grupo">
-<label><input type="radio" name="quinzena" value="10"> DIA 01 A 15</label>
-<label><input type="radio" name="quinzena" value="25"> DIA 16 A 31</label>
+<div class="opcoes">
+<div class="opcao">
+<input type="radio" id="q1" name="quinzena" value="10">
+<label for="q1">01 A 15</label>
+</div>
+<div class="opcao">
+<input type="radio" id="q2" name="quinzena" value="25">
+<label for="q2">16 A 31</label>
+</div>
 </div>
 
 <label>FUNÇÃO</label>
 
-<div class="grupo">
-<label><input type="radio" name="funcao" value="motorista"> MOTORISTA</label>
-<label><input type="radio" name="funcao" value="seguranca"> SEGURANÇA</label>
+<div class="opcoes">
+<div class="opcao">
+<input type="radio" id="f1" name="funcao" value="motorista">
+<label for="f1">MOTORISTA</label>
+</div>
+<div class="opcao">
+<input type="radio" id="f2" name="funcao" value="seguranca">
+<label for="f2">SEGURANÇA</label>
+</div>
 </div>
 
 <label>QUANTIDADE DE SERVIÇOS</label> <select id="qtd"></select>
@@ -34,19 +126,3 @@ SUBSTITUA A PARTE DA PÁGINA 1 POR ESTA:
 <button onclick="gerarLinhas()">PRÓXIMO</button>
 
 </div>
-
-E ADICIONE NO CSS:
-
-.grupo {
-display: flex;
-flex-direction: column;
-gap: 5px;
-margin-bottom: 15px;
-}
-
-.grupo label {
-display: flex;
-align-items: center;
-gap: 8px;
-font-size: 15px;
-}
