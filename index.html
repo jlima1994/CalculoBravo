@@ -2,45 +2,95 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valor a Receber</title>
 
 <style>
-body{
+body {
     font-family: Arial;
     text-align: center;
+    background: #f5f5f5;
 }
 
-select{
-    width: 80%;
+.container {
+    margin-top: 60px;
+}
+
+select {
     padding: 10px;
+    width: 220px;
+    font-size: 16px;
+    margin: 10px;
 }
 
-.box{
-    border: 2px solid #000;
-    padding: 15px;
-    margin: 8px auto;
-    width: 80%;
+.box {
+    display: inline-block;
+    padding: 15px 25px;
+    margin: 10px;
+    border: 2px solid #333;
     cursor: pointer;
 }
 
-.selected{
-    background: #000;
-    color: #fff;
+.selected {
+    background: #333;
+    color: white;
 }
 
-button{
-    margin-top:20px;
-    padding:15px;
-    width:80%;
+button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    font-size: 16px;
 }
 </style>
-</head>
 
+<script>
+let periodo = "";
+let funcao = "";
+
+function selecionarPeriodo(p) {
+    periodo = p;
+    document.getElementById("p1").classList.remove("selected");
+    document.getElementById("p2").classList.remove("selected");
+    document.getElementById("p"+p).classList.add("selected");
+}
+
+function selecionarFuncao(f) {
+    funcao = f;
+    document.getElementById("motorista").classList.remove("selected");
+    document.getElementById("seguranca").classList.remove("selected");
+    document.getElementById(f).classList.add("selected");
+}
+
+function avancar() {
+    let mes = document.getElementById("mes").value;
+    let qtd = document.getElementById("qtd").value;
+
+    if (!mes || !periodo || !funcao) {
+        alert("Preencha tudo");
+        return;
+    }
+
+    localStorage.setItem("mes", mes);
+    localStorage.setItem("periodo", periodo);
+    localStorage.setItem("funcao", funcao);
+    localStorage.setItem("qtd", qtd);
+
+    if (funcao === "motorista") {
+        window.location.href = "pagina2.html";
+    } else {
+        window.location.href = "resultado.html";
+    }
+}
+</script>
+
+</head>
 <body>
 
-<h3>MÊS</h3>
+<div class="container">
+
+<h2>VALOR A RECEBER</h2>
+
 <select id="mes">
-<option value="">Selecione</option>
+<option value="">Selecione o mês</option>
 <option>Janeiro</option>
 <option>Fevereiro</option>
 <option>Março</option>
@@ -55,52 +105,32 @@ button{
 <option>Dezembro</option>
 </select>
 
-<h3>PERÍODO</h3>
-<div class="box" onclick="sel('dia','10',this)">1 A 15</div>
-<div class="box" onclick="sel('dia','25',this)">16 A 31</div>
+<br>
 
-<h3>FUNÇÃO</h3>
-<div class="box" onclick="sel('funcao','motorista',this)">MOTORISTA</div>
-<div class="box" onclick="sel('funcao','seguranca',this)">SEGURANÇA</div>
+<div id="p1" class="box" onclick="selecionarPeriodo(1)">1 a 15</div>
+<div id="p2" class="box" onclick="selecionarPeriodo(2)">16 a 31</div>
 
-<button onclick="go()">CONTINUAR</button>
+<br>
 
+<div id="motorista" class="box" onclick="selecionarFuncao('motorista')">Motorista</div>
+<div id="seguranca" class="box" onclick="selecionarFuncao('seguranca')">Segurança</div>
+
+<br>
+
+<select id="qtd">
+<option value="">Qtd Serviços</option>
 <script>
-let dados = {};
-
-function sel(tipo, valor, el){
-    dados[tipo] = valor;
-
-    document.querySelectorAll('.box').forEach(b=>{
-        if(b.getAttribute("onclick").includes(tipo)){
-            b.classList.remove("selected");
-        }
-    });
-
-    el.classList.add("selected");
-}
-
-function go(){
-    let mes = document.getElementById("mes").value;
-
-    if(!mes || !dados.dia || !dados.funcao){
-        alert("Preencha tudo");
-        return;
-    }
-
-    localStorage.setItem("dados", JSON.stringify({
-        mes,
-        dia: dados.dia,
-        funcao: dados.funcao
-    }));
-
-    if(dados.funcao === "motorista"){
-        location = "pagina2.html";
-    }else{
-        location = "resultado.html";
-    }
+for (let i=1;i<=30;i++){
+document.write(`<option value="${i}">${i}</option>`)
 }
 </script>
+</select>
+
+<br>
+
+<button onclick="avancar()">Avançar</button>
+
+</div>
 
 </body>
 </html>
