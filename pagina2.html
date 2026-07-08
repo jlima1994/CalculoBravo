@@ -5,28 +5,46 @@
 <title>PREENCHIMENTO</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: Arial;
     background: #111;
     color: white;
-    display: flex;
-    justify-content: center;
-    padding-top: 40px;
+    padding: 10px;
 }
 
-.box {
-    width: 350px;
+/* CONTAINER PADRÃO */
+.box, .container {
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
     text-align: center;
 }
 
-h2 {
-    margin-bottom: 20px;
+/* INPUTS E SELECT */
+select, input, button {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    font-size: 16px;
 }
 
+/* BOTÃO */
+button {
+    background: #00c853;
+    border: none;
+    color: white;
+}
+
+/* TABELA */
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px;
 }
 
 th {
@@ -36,23 +54,23 @@ th {
 }
 
 td {
-    padding: 5px;
-}
-
-input {
-    width: 100%;
     padding: 8px;
-    text-align: right;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background: #00c853;
-    border: none;
-    color: white;
-    font-size: 16px;
+/* ALINHAMENTOS */
+.desc {
+    text-align: left;
+    white-space: nowrap;
+}
+
+.valor {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* INPUT NUMÉRICO */
+input {
+    text-align: right;
 }
 </style>
 </head>
