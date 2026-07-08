@@ -2,67 +2,69 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Resultado</title>
+<title>Resultado Final</title>
 
 <style>
 body {
     font-family: Arial;
-    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .container {
-    margin-top: 50px;
+    margin-top: 40px;
+    width: 300px;
 }
 
 .linha {
-    margin: 8px 0;
-    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+}
+
+.desc {
+    text-align: left;
+}
+
+.valor {
+    text-align: right;
+    min-width: 120px;
 }
 </style>
 
 <script>
-function formatar(valor) {
-    return valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+function formatar(v){
+    return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 }
 
-function proximoMes(mes) {
-    const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-                   "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-    let i = meses.indexOf(mes);
-    return meses[(i+1) % 12];
-}
+function carregar(){
 
-function carregar() {
+    let q = localStorage.getItem("quinzena");
 
-    let mes = localStorage.getItem("mes");
-    let periodo = localStorage.getItem("periodo");
-    let funcao = localStorage.getItem("funcao");
-    let qtd = Number(localStorage.getItem("qtd"));
+    let d = Number(localStorage.getItem("totalDiarias")) || 0;
+    let a = Number(localStorage.getItem("totalAluguel")) || 0;
+    let km = Number(localStorage.getItem("totalKm")) || 0;
+    let des = Number(localStorage.getItem("totalDeslocamento")) || 0;
+    let ped = Number(localStorage.getItem("totalPedagios")) || 0;
 
-    let pedagio = Number(localStorage.getItem("pedagio")) || 0;
-    let km = Number(localStorage.getItem("km")) || 0;
+    let total = d + a + des + ped;
 
-    let diaria = qtd * 200;
-    let aluguel = funcao === "motorista" ? qtd * 100 : 0;
-
-    let pagamento = periodo == 1 
-        ? `Pagamento em 10 de ${proximoMes(mes)}`
-        : `Pagamento em 25 de ${proximoMes(mes)}`;
+    let pagamento = q === "PrimeiraQuinzena"
+        ? `Valor a Receber dia 10`
+        : `Valor a Receber dia 25`;
 
     let html = `<div class="container">`;
-    html += `<h3>${pagamento}</h3><br>`;
 
-    if (diaria > 0)
-        html += `<div class="linha">${formatar(diaria)} Diarias (${qtd})</div>`;
+    html += `<h3>${pagamento}</h3>`;
 
-    if (aluguel > 0)
-        html += `<div class="linha">${formatar(aluguel)} Aluguel (${qtd})</div>`;
+    html += `<div class="linha"><div class="desc">Total Diárias</div><div class="valor">${formatar(d)}</div></div>`;
+    html += `<div class="linha"><div class="desc">Total Aluguel</div><div class="valor">${formatar(a)}</div></div>`;
+    html += `<div class="linha"><div class="desc">Total Deslocamento (${km} KM)</div><div class="valor">${formatar(des)}</div></div>`;
+    html += `<div class="linha"><div class="desc">Total Pedágios</div><div class="valor">${formatar(ped)}</div></div>`;
 
-    if (km > 0)
-        html += `<div class="linha">${formatar(km)} Deslocamento (${km} KM)</div>`;
+    html += `<hr>`;
 
-    if (pedagio > 0)
-        html += `<div class="linha">${formatar(pedagio)} Pedágios</div>`;
+    html += `<div class="linha"><div class="desc"><strong>Total</strong></div><div class="valor"><strong>${formatar(total)}</strong></div></div>`;
 
     html += `</div>`;
 
