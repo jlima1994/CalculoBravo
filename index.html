@@ -2,38 +2,40 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INÍCIO</title>
+<title>CÁLCULO BRAVO</title>
 
 <style>
-body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#111;
-    color:#fff;
-    font-family:Arial;
+body {
+    font-family: Arial;
+    background: #111;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.container{
-    width:90%;
-    max-width:400px;
-    text-align:center;
+.container {
+    text-align: center;
+    width: 300px;
 }
 
-select, button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    font-size:16px;
+select, button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    font-size: 16px;
 }
 
-button{
-    background:#00c853;
-    border:none;
-    color:#fff;
+button {
+    background: #00c853;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00e676;
 }
 </style>
 </head>
@@ -42,43 +44,38 @@ button{
 
 <div class="container">
 
-<h2>SISTEMA</h2>
+<h2>CÁLCULO BRAVO</h2>
 
 <select id="mes">
-<option value="">MÊS</option>
-<option>JANEIRO</option>
-<option>FEVEREIRO</option>
-<option>MARÇO</option>
-<option>ABRIL</option>
-<option>MAIO</option>
-<option>JUNHO</option>
-<option>JULHO</option>
-<option>AGOSTO</option>
-<option>SETEMBRO</option>
-<option>OUTUBRO</option>
-<option>NOVEMBRO</option>
-<option>DEZEMBRO</option>
+    <option value="">SELECIONE O MÊS</option>
+    <option>JANEIRO</option>
+    <option>FEVEREIRO</option>
+    <option>MARÇO</option>
+    <option>ABRIL</option>
+    <option>MAIO</option>
+    <option>JUNHO</option>
+    <option>JULHO</option>
+    <option>AGOSTO</option>
+    <option>SETEMBRO</option>
+    <option>OUTUBRO</option>
+    <option>NOVEMBRO</option>
+    <option>DEZEMBRO</option>
 </select>
 
 <select id="quinzena">
-<option value="">QUINZENA</option>
-<option>PRIMEIRA</option>
-<option>SEGUNDA</option>
+    <option value="">QUINZENA</option>
+    <option>PRIMEIRA</option>
+    <option>SEGUNDA</option>
 </select>
 
 <select id="funcao">
-<option value="">FUNÇÃO</option>
-<option value="motorista">MOTORISTA</option>
-<option value="seguranca">SEGURANÇA</option>
+    <option value="">FUNÇÃO</option>
+    <option value="motorista">MOTORISTA</option>
+    <option value="seguranca">SEGURANÇA</option>
 </select>
 
 <select id="qtd">
-<option value="">SERVIÇOS</option>
-<script>
-for(let i=1;i<=30;i++){
-document.write(`<option value="${i}">${i}</option>`);
-}
-</script>
+    <option value="">QTD SERVIÇOS</option>
 </select>
 
 <button onclick="avancar()">AVANÇAR</button>
@@ -86,38 +83,46 @@ document.write(`<option value="${i}">${i}</option>`);
 </div>
 
 <script>
-function avancar(){
-
-let mes = mes.value;
-let quinzena = quinzena.value;
-let funcao = funcao.value;
-let qtdServicos = Number(qtd.value);
-
-if(!mes || !quinzena || !funcao || !qtdServicos){
-alert("PREENCHA TUDO");
-return;
+// Preenche quantidade de serviços
+const selectQtd = document.getElementById("qtd");
+for (let i = 1; i <= 30; i++) {
+    let opt = document.createElement("option");
+    opt.value = i;
+    opt.text = i;
+    selectQtd.appendChild(opt);
 }
 
-localStorage.clear();
+function avancar() {
+    const mes = document.getElementById("mes").value;
+    const quinzena = document.getElementById("quinzena").value;
+    const funcao = document.getElementById("funcao").value;
+    const qtd = document.getElementById("qtd").value;
 
-localStorage.setItem("mes", mes);
-localStorage.setItem("quinzena", quinzena);
-localStorage.setItem("funcao", funcao);
-localStorage.setItem("qtdServicos", qtdServicos);
+    if (!mes || !quinzena || !funcao || !qtd) {
+        alert("PREENCHA TODOS OS CAMPOS");
+        return;
+    }
 
-// SEGURANÇA → CALCULA DIRETO
-if(funcao === "seguranca"){
-let total = qtdServicos * 190;
+    // SALVA DADOS
+    localStorage.setItem("mes", mes);
+    localStorage.setItem("quinzena", quinzena);
+    localStorage.setItem("funcao", funcao);
+    localStorage.setItem("qtd", qtd);
 
-localStorage.setItem("diarias", total);
-localStorage.setItem("totalFinal", total);
+    // FLUXO
+    if (funcao === "motorista") {
+        window.location.href = "pagina2.html";
+    } else {
+        // SEGURANÇA → CALCULA DIRETO
+        const total = qtd * 190;
 
-window.location.href = "resultado.html";
-return;
-}
+        localStorage.setItem("diarias", total);
+        localStorage.setItem("aluguel", 0);
+        localStorage.setItem("km", 0);
+        localStorage.setItem("pedagios", 0);
 
-// MOTORISTA → PAGINA 2
-window.location.href = "pagina2.html";
+        window.location.href = "resultados.html";
+    }
 }
 </script>
 
