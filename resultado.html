@@ -2,64 +2,67 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<title>Resultado</title>
 
 <style>
-body{
+body {
     font-family: Arial;
-    text-align:center;
+    text-align: center;
+}
+
+.container {
+    margin-top: 40px;
 }
 </style>
-</head>
-
-<body>
-
-<h3 id="topo"></h3>
-
-<pre id="res"></pre>
 
 <script>
-const r = JSON.parse(localStorage.getItem("resultado") || localStorage.getItem("dados"));
+function proximoMes(mes) {
+    const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+                   "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 
-function f(v){ return (v||0).toFixed(2); }
+    let i = meses.indexOf(mes);
+    return meses[(i+1) % 12];
+}
 
-// mês seguinte
-const meses = [
-"Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
-];
+function carregar() {
+    let mes = localStorage.getItem("mes");
+    let periodo = localStorage.getItem("periodo");
+    let funcao = localStorage.getItem("funcao");
+    let qtd = Number(localStorage.getItem("qtd"));
+    let pedagio = Number(localStorage.getItem("pedagio")) || 0;
+    let km = Number(localStorage.getItem("km")) || 0;
 
-let prox = meses[(meses.indexOf(r.mes)+1)%12];
+    let diaria = qtd * 200;
+    let aluguel = funcao === "motorista" ? qtd * 100 : 0;
 
-// topo pagamento
-topo.innerText = (r.dia=="10")
-? `Pagamento dia 10 de ${prox}`
-: `Pagamento dia 25 de ${prox}`;
+    let total = diaria + aluguel + pedagio;
 
-// valores
-let td = r.totalDiarias||0;
-let ta = r.totalAluguel||0;
-let km = r.totalDeslocamento||0;
-let tp = r.totalPed||0;
+    let pagamento = periodo == 1 
+        ? `Pagamento em 10 de ${proximoMes(mes)}`
+        : `Pagamento em 25 de ${proximoMes(mes)}`;
 
-let qtdD = r.qtdDiarias||0;
-let qtdA = r.qtdAluguel||0;
-let kmReal = r.km||0;
+    let html = `<div class="container">`;
+    html += `<h3>${pagamento}</h3><br>`;
 
-let total = td+ta+km+tp;
+    if (diaria > 0)
+        html += `Diárias: R$ ${diaria} (${qtd})<br>`;
 
-let linhas=[];
+    if (aluguel > 0)
+        html += `Aluguel: R$ ${aluguel} (${qtd})<br>`;
 
-// oculta zero
-if(td>0) linhas.push(`R$ ${f(td)} DIÁRIAS (${qtdD})`);
-if(ta>0) linhas.push(`R$ ${f(ta)} ALUGUEL (${qtdA})`);
-if(km>0) linhas.push(`R$ ${f(km)} KM (${kmReal})`);
-if(tp>0) linhas.push(`R$ ${f(tp)} PEDÁGIO`);
+    if (pedagio > 0)
+        html += `Pedágio: R$ ${pedagio}<br>`;
 
-linhas.push("");
-linhas.push(`R$ ${f(total)} TOTAL`);
+    html += `<br>Total: R$ ${total} (${km} KM)</div>`;
 
-res.innerText = linhas.join("\n");
+    document.body.innerHTML = html;
+}
+
+window.onload = carregar;
 </script>
+
+</head>
+<body>
 
 </body>
 </html>
