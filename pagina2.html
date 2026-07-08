@@ -2,99 +2,126 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SERVIÇOS</title>
+<title>PREENCHIMENTO</title>
 
 <style>
-body{
-    background:#111;
-    color:#fff;
-    font-family:Arial;
-    padding:15px;
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #111;
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+.box {
+    width: 350px;
+    text-align: center;
 }
 
-th, td{
-    border:1px solid #444;
-    padding:10px;
-    text-align:center;
+h2 {
+    margin-bottom: 20px;
 }
 
-input{
-    width:80px;
-    padding:5px;
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-button{
-    width:100%;
-    margin-top:15px;
-    padding:12px;
-    background:#00c853;
-    border:none;
-    color:#fff;
+th {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+td {
+    padding: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    text-align: right;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #00c853;
+    border: none;
+    color: white;
+    font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
+<div class="box">
+
+<h2>PREENCHER DADOS</h2>
+
 <table>
 <thead>
 <tr>
-<th>KM</th>
 <th>PEDÁGIOS</th>
+<th>KM</th>
 </tr>
 </thead>
-<tbody id="tabela"></tbody>
+
+<tbody id="linhas"></tbody>
+
 </table>
 
-<button onclick="calcular()">CALCULAR</button>
+<button onclick="enviar()">CALCULAR</button>
+
+</div>
 
 <script>
+const qtd = parseInt(localStorage.getItem("qtd")) || 0;
+const container = document.getElementById("linhas");
 
-let qtd = Number(localStorage.getItem("qtdServicos"));
+// cria linhas
+for (let i = 0; i < qtd; i++) {
+    const tr = document.createElement("tr");
 
-let tabela = document.getElementById("tabela");
+    tr.innerHTML = `
+        <td><input type="number" step="0.01" class="pedagio" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" class="km" placeholder="0.00"></td>
+    `;
 
-for(let i=0;i<qtd;i++){
-tabela.innerHTML += `
-<tr>
-<td><input type="number" class="km"></td>
-<td><input type="number" class="pedagio"></td>
-</tr>`;
+    container.appendChild(tr);
 }
 
-function calcular(){
+// cálculo
+function enviar() {
+    let totalPedagio = 0;
+    let totalKm = 0;
 
-let kms = document.querySelectorAll(".km");
-let pedagios = document.querySelectorAll(".pedagio");
+    document.querySelectorAll(".pedagio").forEach(el => {
+        totalPedagio += parseFloat(el.value) || 0;
+    });
 
-let totalKm = 0;
-let totalPedagio = 0;
+    document.querySelectorAll(".km").forEach(el => {
+        totalKm += parseFloat(el.value) || 0;
+    });
 
-for(let i=0;i<kms.length;i++){
-totalKm += Number(kms[i].value) || 0;
-totalPedagio += Number(pedagios[i].value) || 0;
-}
+    const qtdServ = parseInt(localStorage.getItem("qtd")) || 0;
 
-let deslocamento = totalKm * 0.68;
-let diarias = qtd * 190;
-let aluguel = qtd * 49.50;
+    const pedagios = totalPedagio;
+    const deslocamento = totalKm * 0.68;
+    const diarias = qtdServ * 190;
+    const aluguel = qtdServ * 49.5;
 
-let totalFinal = deslocamento + totalPedagio + diarias + aluguel;
+    // salva
+    localStorage.setItem("pedagios", pedagios.toFixed(2));
+    localStorage.setItem("km", deslocamento.toFixed(2));
+    localStorage.setItem("diarias", diarias.toFixed(2));
+    localStorage.setItem("aluguel", aluguel.toFixed(2));
 
-localStorage.setItem("totalKm", totalKm);
-localStorage.setItem("deslocamento", deslocamento);
-localStorage.setItem("pedagios", totalPedagio);
-localStorage.setItem("diarias", diarias);
-localStorage.setItem("aluguel", aluguel);
-localStorage.setItem("totalFinal", totalFinal);
-
-window.location.href = "resultado.html";
+    window.location.href = "resultados.html";
 }
 </script>
 
