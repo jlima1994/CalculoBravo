@@ -91,6 +91,7 @@ for(let i=0; i<qtd; i++){
 }
 
 // 🔥 CALCULAR
+<script>
 function calcular(){
 
     let pedagios = document.querySelectorAll(".pedagio");
@@ -100,30 +101,39 @@ function calcular(){
     let totalKm = 0;
 
     for(let i=0; i<pedagios.length; i++){
-        totalPedagio += Number(pedagios[i].value) || 0;
-        totalKm += Number(kms[i].value) || 0;
+        totalPedagio += parseFloat(pedagios[i].value) || 0;
+        totalKm += parseFloat(kms[i].value) || 0;
     }
 
-    let valorKm = totalKm * 0.68;
-    let qtdServicos = qtd;
+    let qtdServicos = Number(localStorage.getItem("qtdServicos")) || 0;
 
+    let valorKm = totalKm * 0.68;
     let diarias = qtdServicos * 190;
     let aluguel = qtdServicos * 49.50;
 
     let totalFinal = totalPedagio + valorKm + diarias + aluguel;
 
-    // 🔥 SALVAR TUDO
-    localStorage.setItem("totalPedagio", totalPedagio);
-    localStorage.setItem("totalKm", totalKm);
-    localStorage.setItem("valorKm", valorKm);
-    localStorage.setItem("diarias", diarias);
-    localStorage.setItem("aluguel", aluguel);
-    localStorage.setItem("totalFinal", totalFinal);
+    // 🔥 SALVAR TUDO COMO NÚMERO
+    localStorage.setItem("totalPedagio", totalPedagio.toFixed(2));
+    localStorage.setItem("totalKm", totalKm.toFixed(2));
+    localStorage.setItem("valorKm", valorKm.toFixed(2));
+    localStorage.setItem("diarias", diarias.toFixed(2));
+    localStorage.setItem("aluguel", aluguel.toFixed(2));
+    localStorage.setItem("totalFinal", totalFinal.toFixed(2));
 
-    // IR PARA RESULTADO
+    // DEBUG (opcional)
+    console.log({
+        totalPedagio,
+        totalKm,
+        valorKm,
+        diarias,
+        aluguel,
+        totalFinal
+    });
+
     window.location.href = "resultado.html";
 }
-
+</script>
 </script>
 
 </body>
