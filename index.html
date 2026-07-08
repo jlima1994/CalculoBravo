@@ -9,102 +9,55 @@
 <style>
 body {
     font-family: Arial, sans-serif;
+    background: #f2f2f2;
     margin: 0;
-    background: #f4f4f4;
+    padding: 10px;
 }
 
 .container {
-    padding: 15px;
     max-width: 500px;
     margin: auto;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
 }
 
 h2 {
     text-align: center;
 }
 
-/* CAMPOS */
-select, input {
+label {
+    margin-top: 10px;
+    display: block;
+}
+
+input, select {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0 15px;
-    font-size: 16px;
-    border-radius: 8px;
+    padding: 8px;
+    margin-top: 3px;
+    border-radius: 5px;
     border: 1px solid #ccc;
 }
 
-/* BOTÃO */
 button {
     width: 100%;
-    padding: 14px;
-    background: #000;
-    color: #fff;
+    padding: 10px;
+    margin-top: 15px;
+    background: #007bff;
+    color: white;
     border: none;
+    border-radius: 5px;
     font-size: 16px;
-    border-radius: 10px;
-    margin-top: 10px;
 }
 
-.hidden {
-    display: none;
-}
-
-/* RADIO MODERNO */
-.opcoes {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.opcao {
-    flex: 1;
-}
-
-.opcao input {
-    display: none;
-}
-
-.opcao label {
-    display: block;
-    padding: 12px;
-    text-align: center;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-    background: #fff;
-    cursor: pointer;
-}
-
-.opcao input:checked + label {
-    background: #000;
-    color: #fff;
-    border-color: #000;
-}
-
-/* LISTA */
-.row {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 8px;
-}
-
-.row input {
-    flex: 1;
-}
-
-/* RESULTADO ESTILO EXTRATO */
 .result {
-    background: #fff;
-    padding: 15px;
+    background: #fafafa;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
     font-family: monospace;
-    white-space: pre-line;
-    font-size: 15px;
-}
-
-/* MOBILE */
-@media (max-width: 400px) {
-    .opcoes {
-        flex-direction: column;
-    }
+    white-space: pre;
+    font-size: 14px;
 }
 </style>
 
@@ -114,148 +67,77 @@ button {
 
 <div class="container">
 
-<!-- PAGINA 1 -->
+<h2>VALOR A RECEBER</h2>
 
-<div id="page1">
-<h2>CALCULAR QUINZENA</h2>
+<label>Data:</label> <input type="date" id="data">
 
-<label>MÊS TRABALHADO</label> <select id="mes">
+<label>Quantidade de Serviços:</label> <select id="qtdServicos" onchange="gerarCampos()"> <option value="">Selecione</option> <option value="1">1 serviço</option> <option value="2">2 serviços</option> <option value="3">3 serviços</option> <option value="4">4 serviços</option> </select>
 
-<option>JANEIRO</option><option>FEVEREIRO</option>
-<option>MARÇO</option><option>ABRIL</option>
-<option>MAIO</option><option>JUNHO</option>
-<option>JULHO</option><option>AGOSTO</option>
-<option>SETEMBRO</option><option>OUTUBRO</option>
-<option>NOVEMBRO</option><option>DEZEMBRO</option>
-</select>
+<div id="servicos"></div>
 
-<label>QUINZENA</label>
+<label>Valor KM (R$):</label> <input type="number" id="valorKm" value="1.5">
 
-<div class="opcoes">
-<div class="opcao">
-<input type="radio" id="q1" name="quinzena" value="10">
-<label for="q1">01 A 15</label>
-</div>
-<div class="opcao">
-<input type="radio" id="q2" name="quinzena" value="25">
-<label for="q2">16 A 31</label>
-</div>
-</div>
+<label>Total Pedágio (R$):</label> <input type="number" id="pedagio" value="0">
 
-<label>FUNÇÃO</label>
+<button onclick="calcular()">CALCULAR</button>
 
-<div class="opcoes">
-<div class="opcao">
-<input type="radio" id="f1" name="funcao" value="motorista">
-<label for="f1">MOTORISTA</label>
-</div>
-<div class="opcao">
-<input type="radio" id="f2" name="funcao" value="seguranca">
-<label for="f2">SEGURANÇA</label>
-</div>
-</div>
-
-<label>QUANTIDADE DE SERVIÇOS</label> <select id="qtd">
-
-<option value="">SELECIONE</option>
-<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-<option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-<option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
-<option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-<option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
-<option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
-</select>
-
-<button onclick="gerarLinhas()">PRÓXIMO</button>
-
-</div>
-
-<!-- PAGINA 2 -->
-
-<div id="page2" class="hidden">
-<h2>PEDÁGIO E KM</h2>
-<div id="lista"></div>
-<button onclick="calcular()">MOSTRAR RESULTADOS</button>
-</div>
-
-<!-- PAGINA 3 -->
-
-<div id="page3" class="hidden">
-<h2>RESULTADO FINAL</h2>
 <div class="result" id="resultado"></div>
-<button onclick="copiar()">COPIAR RESULTADO</button>
-</div>
 
 </div>
 
 <script>
-function gerarLinhas() {
-    const qtd = parseInt(document.getElementById("qtd").value);
-
-    if (!qtd) {
-        alert("SELECIONE A QUANTIDADE DE SERVIÇOS");
-        return;
-    }
-
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "";
+function gerarCampos() {
+    const qtd = document.getElementById('qtdServicos').value;
+    const container = document.getElementById('servicos');
+    container.innerHTML = '';
 
     for (let i = 1; i <= qtd; i++) {
-        lista.innerHTML += `
-        <div class="row">
-            <input type="number" placeholder="PEDÁGIO R$" class="pedagio">
-            <input type="number" placeholder="KM" class="km">
-        </div>`;
-    }
+        container.innerHTML += `
+            <hr>
+            <label>SERVIÇO ${i} (R$):</label>
+            <input type="number" id="servico${i}" value="0">
 
-    document.getElementById("page1").classList.add("hidden");
-    document.getElementById("page2").classList.remove("hidden");
+            <label>KM ${i}:</label>
+            <input type="number" id="km${i}" value="0">
+        `;
+    }
+}
+
+function formatarData(data) {
+    if (!data) return '';
+    const partes = data.split('-');
+    return partes[2] + '/' + partes[1] + '/' + partes[0];
 }
 
 function calcular() {
-    const pedagios = document.querySelectorAll(".pedagio");
-    const kms = document.querySelectorAll(".km");
+    const qtd = document.getElementById('qtdServicos').value;
+    const valorKm = parseFloat(document.getElementById('valorKm').value) || 0;
+    const pedagio = parseFloat(document.getElementById('pedagio').value) || 0;
+    const data = formatarData(document.getElementById('data').value);
 
-    let totalPedagio = 0;
-    let totalKM = 0;
+    let totalServicos = 0;
+    let totalKm = 0;
 
-    pedagios.forEach(p => totalPedagio += Number(p.value) || 0);
-    kms.forEach(k => totalKM += Number(k.value) || 0);
-
-    const qtd = parseInt(document.getElementById("qtd").value);
-    const funcao = document.querySelector('input[name="funcao"]:checked')?.value;
-    const quinzena = document.querySelector('input[name="quinzena"]:checked')?.value;
-
-    if (!funcao || !quinzena) {
-        alert("PREENCHA FUNÇÃO E QUINZENA");
-        return;
+    for (let i = 1; i <= qtd; i++) {
+        totalServicos += parseFloat(document.getElementById('servico'+i).value) || 0;
+        totalKm += parseFloat(document.getElementById('km'+i).value) || 0;
     }
 
-    const totalDiarias = qtd * 190;
-    const totalAluguel = funcao === "motorista" ? qtd * 49.5 : 0;
-    const totalDeslocamento = totalKM * 0.68;
-    const totalFinal = totalDiarias + totalAluguel + totalDeslocamento + totalPedagio;
+    const totalDeslocamento = totalKm * valorKm;
+    const totalFinal = totalServicos + totalDeslocamento + pedagio;
 
-    const dia = quinzena == "10" ? "DIA 10" : "DIA 25";
+    function f(v){
+        return v.toFixed(2).padStart(10);
+    }
 
     const texto =
-`R$ ${totalDiarias.toFixed(2).padStart(10)}  TOTAL DIÁRIAS
-R$ ${totalAluguel.toFixed(2).padStart(10)}  TOTAL ALUGUEL
-R$ ${totalDeslocamento.toFixed(2).padStart(10)}  TOTAL DESLOCAMENTO (KM)
-R$ ${totalPedagio.toFixed(2).padStart(10)}  TOTAL PEDÁGIOS
+`R$ ${f(totalServicos)}  TOTAL SERVIÇOS
+R$ ${f(totalDeslocamento)}  TOTAL DESLOCAMENTO (KM)
+R$ ${f(pedagio)}  TOTAL PEDÁGIOS
 
-R$ ${totalFinal.toFixed(2).padStart(10)}  VALOR A RECEBER ${dia}`;
+R$ ${f(totalFinal)}  VALOR A RECEBER ${data}`;
 
-    document.getElementById("resultado").innerText = texto.toUpperCase();
-
-    document.getElementById("page2").classList.add("hidden");
-    document.getElementById("page3").classList.remove("hidden");
-}
-
-function copiar() {
-    const texto = document.getElementById("resultado").innerText;
-    navigator.clipboard.writeText(texto);
-    alert("COPIADO!");
+    document.getElementById('resultado').innerText = texto;
 }
 </script>
 
